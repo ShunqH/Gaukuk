@@ -4,12 +4,10 @@
 #include <cstddef>  // size_t
 #include <algorithm> // swap, copy
 
-namespace Gaukuk
-{
+namespace Gaukuk{
 
 template<class T>
-class TArray
-{
+class TArray{
 public:
     enum class ArrayStatus { empty, allocated }; 
     TArray() : pdata_(nullptr), n1_(0), n2_(0), n3_(0), n4_(0), nArr(0), state_(ArrayStatus::empty){}; 
@@ -35,8 +33,8 @@ public:
     TArray(TArray<T>&& other) noexcept; 
     TArray<T>& operator=(TArray<T>&& other) noexcept; 
 
-    size_t Size() const { return nArr; }
-    size_t SizeInBytes() const { return nArr*sizeof(T); }
+    size_t GetSize() const { return nArr; }
+    size_t GetSizeInBytes() const { return nArr*sizeof(T); }
     int GetN1() const { return n1_; }
     int GetN2() const { return n2_; }
     int GetN3() const { return n3_; }
@@ -101,7 +99,7 @@ template<class T>
 TArray<T>& TArray<T>::operator=(const TArray<T>& other){
     if (this != &other){
         TArray<T> newArr(other); 
-        swap(newArr); 
+        Swap(newArr); 
     }
     return *this; 
 }
