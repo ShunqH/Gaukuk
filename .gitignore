@@ -1,0 +1,51 @@
+# compile
+*.o
+*.out
+*.exe
+*.mod
+
+# CMake / Make
+obj/
+
+# Python
+__pycache__/
+*.pyc
+
+# data
+*.hdf5
+*.h5
+*.dat
+*.bin
+output_*
+./bin/*
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tiff
+*.bmp
+*.pdf
+
+# Videos
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.gif
+
+# Visualization outputs
+*.vtk
+*.vtu
+*.pvtu
+*.xdmf
+*.xmf
+
+# log
+*.log
+*.tmp
+
+# macOS
+.DS_Store
