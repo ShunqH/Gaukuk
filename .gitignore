@@ -3,6 +3,7 @@
 *.out
 *.exe
 *.mod
+*.out_*
 
 # CMake / Make
 obj/
