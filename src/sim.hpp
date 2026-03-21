@@ -5,13 +5,14 @@
 
 // Gaukuk dependence
 #include "template_array.hpp"
+#include "eos.hpp" 
 #include "gaukuk.hpp" 
 
 namespace Gaukuk{
 
 class Domain{
 public:
-friend class Gaukuk; 
+friend class Sim; 
     void SetDomain(const int nx, const int ny, const int nz); 
 
 private:
@@ -21,21 +22,25 @@ private:
 };
 
 
-class Gaukuk{
+class Sim{
 public:
     Domain domain; 
     Real t, dt, cmax, CFL;  
-    int nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
+    int nVar, nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
 
     TArray<Real> cons, prim;
     TArray<Real> flx1, flx2, flx3; 
 
-    Gaukuk(); 
+    Sim(); 
+
+    EquationOfState eos; 
 
     void UpdateBD(); 
     void UpdateFlux(); 
     void RiemannSolver(); 
     void UpdateCons(); 
+// private:
+    
 }; 
 
 } // namespace Gaukuk

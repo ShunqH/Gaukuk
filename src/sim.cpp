@@ -10,11 +10,11 @@ void Domain::SetDomain(const int nx, const int ny, const int nz){
     yGrid.NewArray(ny); 
     zGrid.NewArray(nz); 
     for (int i=0; i<nx; i++) { xGrid(i) = xmin + 0.5*dx + i*dx; }
-    for (int j=0; j<nx; j++) { yGrid(j) = ymin + 0.5*dy + j*dy; }
-    for (int k=0; k<nx; k++) { zGrid(k) = zmin + 0.5*dz + k*dz; }
+    for (int j=0; j<ny; j++) { yGrid(j) = ymin + 0.5*dy + j*dy; }
+    for (int k=0; k<nz; k++) { zGrid(k) = zmin + 0.5*dz + k*dz; }
 }
 
-Gaukuk::Gaukuk(){
+Sim::Sim(){
     domain.xmax = 0.5; 
     domain.xmin = -0.5; 
     domain.ymax = 0.5; 
@@ -24,9 +24,10 @@ Gaukuk::Gaukuk(){
     t = 0;
     CFL = 0.5; 
     
-    nx = 101; 
-    ny = 1; 
-    nz = 1; 
+    nVar = 5;
+    nx = 1001; 
+    ny = 101; 
+    nz = 101; 
     nGhost = 1; 
 
     lenx = nx + 2*nGhost; 
@@ -37,11 +38,11 @@ Gaukuk::Gaukuk(){
     cmax = 1; 
 
     domain.SetDomain(nx, ny, nz); 
-    cons.NewArray(5, lenz, leny, lenx);
-    prim.NewArray(5, lenz, leny, lenx);
-    flx1.NewArray(5, nz, ny, nx+1); 
-    flx2.NewArray(5, nz, ny+1, nx); 
-    flx3.NewArray(5, nz+1, ny, nx); 
+    cons.NewArray(nVar, lenz, leny, lenx);
+    prim.NewArray(nVar, lenz, leny, lenx);
+    flx1.NewArray(nVar, nz, ny, nx+1); 
+    flx2.NewArray(nVar, nz, ny+1, nx); 
+    flx3.NewArray(nVar, nz+1, ny, nx); 
 }
 
 } // namespace Gaukuk
