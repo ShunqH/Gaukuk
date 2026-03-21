@@ -33,6 +33,12 @@ public:
     TArray(TArray<T>&& other) noexcept; 
     TArray<T>& operator=(TArray<T>&& other) noexcept; 
 
+    // method to allocate new array
+    void NewArray(int n1); 
+    void NewArray(int n2, int n1); 
+    void NewArray(int n3, int n2, int n1); 
+    void NewArray(int n4, int n3, int n2, int n1); 
+
     size_t GetSize() const { return nArr; }
     size_t GetSizeInBytes() const { return nArr*sizeof(T); }
     int GetN1() const { return n1_; }
@@ -144,6 +150,30 @@ TArray<T>& TArray<T>::operator=(TArray<T>&& other) noexcept{
         other.state_ = ArrayStatus::empty; 
     }
     return *this; 
+}
+
+template<class T>
+void TArray<T>::NewArray(int n1){
+    TArray<T> newArr(n1); 
+    Swap(newArr); 
+}
+
+template<class T>
+void TArray<T>::NewArray(int n2, int n1){
+    TArray<T> newArr(n2, n1); 
+    Swap(newArr); 
+}
+
+template<class T>
+void TArray<T>::NewArray(int n3, int n2, int n1){
+    TArray<T> newArr(n3, n2, n1); 
+    Swap(newArr); 
+}
+
+template<class T>
+void TArray<T>::NewArray(int n4, int n3, int n2, int n1){
+    TArray<T> newArr(n4, n3, n2, n1); 
+    Swap(newArr); 
 }
 
 template<class T>

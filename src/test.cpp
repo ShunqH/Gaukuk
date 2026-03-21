@@ -8,7 +8,9 @@ int main(){
     int ny = 3; 
     int nz = 4; 
     TArray<double> arr1(nVar, nz, ny, nx);
-    TArray<double> arr2(nVar, ny, nx);
+    // TArray<double> arr2(nVar, ny, nx);
+    TArray<double> arr2; 
+    arr2.NewArray(nVar, ny, nx); 
     for (size_t i = 0; i < arr1.GetSize(); i++){
         arr1(i) = i; 
     } 
