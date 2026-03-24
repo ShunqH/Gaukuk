@@ -1,48 +1,53 @@
+// CPP header
+#include <stdexcept>    // runtime_error
+
 #include "sim.hpp"
+#include "utils/utils.hpp"
 
 namespace Gaukuk{
 
-void Domain::SetDomain(const int nx, const int ny, const int nz){
-    dx = ( xmax - xmin ) / nx; 
-    dy = ( ymax - ymin ) / ny; 
-    dz = ( zmax - zmin ) / nz; 
-    xGrid.NewArray(nx); 
-    yGrid.NewArray(ny); 
-    zGrid.NewArray(nz); 
-    for (int i=0; i<nx; i++) { xGrid(i) = xmin + 0.5*dx + i*dx; }
-    for (int j=0; j<ny; j++) { yGrid(j) = ymin + 0.5*dy + j*dy; }
-    for (int k=0; k<nz; k++) { zGrid(k) = zmin + 0.5*dz + k*dz; }
+Grid::Grid() : 
+    nx(static_cast<int>(Config::getInstance().get("NX"))),
+    ny(static_cast<int>(Config::getInstance().get("NY"))),
+    nz(static_cast<int>(Config::getInstance().get("NZ"))),
+    nGhost(static_cast<int>(Config::getInstance().get("NGhost"))) {
+    if (nx <= 0 || ny <= 0 || nz <= 0 || nGhost < 0)
+        throw std::runtime_error("Invalid grid parameters from config");
+    lenx = nx + 2 * nGhost;
+    leny = ny + 2 * nGhost;
+    lenz = nz + 2 * nGhost;
+    lenArr = lenx * leny * lenz;
 }
 
-Sim::Sim(){
-    domain.xmax = 0.5; 
-    domain.xmin = -0.5; 
-    domain.ymax = 0.5; 
-    domain.ymin = -0.5; 
-    domain.zmax = 0.5; 
-    domain.zmin = -0.5; 
-    t = 0;
-    CFL = 0.5; 
-    
-    nVar = 5;
-    nx = 1001; 
-    ny = 101; 
-    nz = 101; 
-    nGhost = 1; 
+Domain::Domain(const Grid& grid) : 
+    xmin(Config::getInstance().get("xmin")), 
+    xmax(Config::getInstance().get("xmax")), 
+    ymin(Config::getInstance().get("ymin")), 
+    ymax(Config::getInstance().get("ymax")), 
+    zmin(Config::getInstance().get("zmin")), 
+    zmax(Config::getInstance().get("zmax")) {
+    dx = ( xmax - xmin ) / grid.nx; 
+    dy = ( ymax - ymin ) / grid.ny; 
+    dz = ( zmax - zmin ) / grid.nz; 
+    xGrid.NewArray(grid.nx); 
+    yGrid.NewArray(grid.ny); 
+    zGrid.NewArray(grid.nz); 
+    for (int i=0; i<grid.nx; i++) { xGrid(i) = xmin + 0.5*dx + i*dx; }
+    for (int j=0; j<grid.ny; j++) { yGrid(j) = ymin + 0.5*dy + j*dy; }
+    for (int k=0; k<grid.nz; k++) { zGrid(k) = zmin + 0.5*dz + k*dz; }
+}
 
-    lenx = nx + 2*nGhost; 
-    leny = ny + 2*nGhost; 
-    lenz = nz + 2*nGhost; 
-    lenArr = lenx*leny*lenz; 
+
+Sim::Sim(): domain(grid), nVar(5){
+    t = 0;
+    CFL = Config::getInstance().get("CFL"); 
 
     cmax = 1; 
-
-    domain.SetDomain(nx, ny, nz); 
-    cons.NewArray(nVar, lenz, leny, lenx);
-    prim.NewArray(nVar, lenz, leny, lenx);
-    flx1.NewArray(nVar, nz, ny, nx+1); 
-    flx2.NewArray(nVar, nz, ny+1, nx); 
-    flx3.NewArray(nVar, nz+1, ny, nx); 
+    cons.NewArray(nVar, grid.lenz, grid.leny, grid.lenx);
+    prim.NewArray(nVar, grid.lenz, grid.leny, grid.lenx);
+    flx1.NewArray(nVar, grid.nz, grid.ny, grid.nx+1); 
+    flx2.NewArray(nVar, grid.nz, grid.ny+1, grid.nx); 
+    flx3.NewArray(nVar, grid.nz+1, grid.ny, grid.nx); 
 }
 
 } // namespace Gaukuk

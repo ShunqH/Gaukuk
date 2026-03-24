@@ -7,26 +7,36 @@
 
 #include "gaukuk.hpp"
 #include "sim.hpp"
-#include "eos.hpp"
 #include "template_array.hpp"
 
-int main(){
+#include "eos/eos.hpp"
+#include "utils/utils.hpp"
+
+int main(int argc, char* argv[]){
     using namespace Gaukuk;
+
+    if (argc < 3 || std::string(argv[1]) != "-i") {
+        std::cerr << "Usage: " << argv[0] << " -i input.in" << std::endl;
+        return 1;
+    }
+    Config::getInstance().loadFromFile(argv[2]);
     
     Sim sim; 
-    Real den = 0.5; 
-    Real vl1 = 0.3, vl2 = 0.6, vl3 = 0.8; 
-    Real pre = 1.2; 
-    Real gamma = 1.4; 
+    Real den = Config::getInstance().get("rho"); 
+    Real vl1 = Config::getInstance().get("vx"); 
+    Real vl2 = Config::getInstance().get("vy"); 
+    Real vl3 = Config::getInstance().get("vz"); 
+    Real pre = Config::getInstance().get("pressure"); 
+    Real gamma = Config::getInstance().get("gamma"); 
 
     Real engInt = pre/(gamma - 1); 
     Real engKin = 0.5 * den * ( vl1*vl1 + vl2*vl2 + vl3*vl3 ); 
     Real eng = engInt + engKin; 
 #pragma omp parallel for
-    for (int k = 0; k<sim.lenz; k++){
-        for (int j = 0; j<sim.leny; j++){
+    for (int k = 0; k<sim.grid.lenz; k++){
+        for (int j = 0; j<sim.grid.leny; j++){
             #pragma omp simd 
-            for (int i = 0; i<sim.lenx; i++){
+            for (int i = 0; i<sim.grid.lenx; i++){
                 Real& consDen = sim.cons(DEN, k, j, i); 
                 Real& consMt1 = sim.cons(MT1, k, j, i); 
                 Real& consMt2 = sim.cons(MT2, k, j, i); 
@@ -43,14 +53,14 @@ int main(){
     }
 
     
-    int steps = 101; 
+    int steps = 1; 
     auto time1 = std::chrono::high_resolution_clock::now();
     auto time2 = std::chrono::high_resolution_clock::now();
     clock_t cputime1 = clock();
     clock_t cputime2 = clock();
     for (int n=0; n<steps; n++){
-        sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.nx, 0, sim.ny, 0, sim.nz);
-        sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.nx, 0, sim.ny, 0, sim.nz); 
+        sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz);
+        sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
     }
 
     // std::cout<<sim.cons.GetN1()<<std::endl; 
@@ -58,7 +68,7 @@ int main(){
     // std::cout<<sim.cons.GetN3()<<std::endl; 
     // std::cout<<sim.cons.GetN4()<<std::endl; 
     // std::cout<<sim.cons.GetSize()/5<<std::endl; 
-    sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.nx, 0, sim.ny, 0, sim.nz); 
+    sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
     // std::cout<<sim.cons(DEN, 5, 5, 5)<<std::endl; 
     // std::cout<<sim.cons(MT1, 5, 5, 5)<<std::endl; 
     // std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
@@ -69,7 +79,7 @@ int main(){
 
     std::cout<<eng<<std::endl; 
     std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
-    sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.nx, 0, sim.ny, 0, sim.nz); 
+    sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
     std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
 
     std::cout<<gamma*pre/den<<std::endl; 

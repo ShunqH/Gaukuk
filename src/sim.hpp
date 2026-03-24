@@ -5,15 +5,22 @@
 
 // Gaukuk dependence
 #include "template_array.hpp"
-#include "eos.hpp" 
+#include "eos/eos.hpp" 
 #include "gaukuk.hpp" 
 
 namespace Gaukuk{
 
+class Grid{
+public:
+friend class Sim; 
+    Grid(); 
+    int nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
+};
+
 class Domain{
 public:
 friend class Sim; 
-    void SetDomain(const int nx, const int ny, const int nz); 
+    Domain(const Grid& grid); 
 
 private:
     Real xmin, xmax, ymin, ymax, zmin, zmax; 
@@ -21,13 +28,13 @@ private:
     TArray<Real> xGrid, yGrid, zGrid; 
 };
 
-
 class Sim{
 public:
-    Domain domain; 
+    const Grid grid; 
+    const Domain domain; 
+    const int nVar; 
     Real t, dt, cmax, CFL;  
-    int nVar, nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
-
+    
     TArray<Real> cons, prim;
     TArray<Real> flx1, flx2, flx3; 
 

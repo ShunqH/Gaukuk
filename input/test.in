@@ -1,0 +1,28 @@
+# config
+
+# initialization
+rho             = 0.5 
+vx              = 0.3  
+vy              = 0.6 
+vz              = 0.8 
+pressure        = 1.2  
+
+# equation of state 
+gamma           = 1.4           # for adiabatic eos 
+
+# simulation 
+CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
+
+# domain size 
+xmin            = -0.5 
+xmax            = 0.5
+ymin            = -0.5
+ymax            = 0.5 
+zmin            = -0.5
+zmax            = 0.5 
+
+# mesh 
+NX              = 1024           # resolution on x   
+NY              = 128           # resolution on y    
+NZ              = 128           # resolution on z  
+NGhost          = 1             # number of ghost cell ( usually is 1 )

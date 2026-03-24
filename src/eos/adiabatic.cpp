@@ -1,16 +1,18 @@
 #include <cmath> // sqrt()
 
-#include "gaukuk.hpp"
-#include "template_array.hpp"
 #include "eos.hpp"
+#include "../utils/utils.hpp" // Config 
 
 namespace Gaukuk{
     
 // adiabatic equation of state
 EquationOfState::EquationOfState(){
-    gamma_ = 1.4;               // read adiabatic index gamma from input file
-    densityMin_ = 1e-10;        // density minimum (floor)
-    pressureMin_ = 1e-10;       // pressure minimum (floor)
+    // read adiabatic index gamma from input file
+    gamma_ = Config::getInstance().get("gamma") ; 
+    // density minimum (floor)
+    densityMin_ = Config::getInstance().get("rho_floor", 1e-10) ; 
+    // pressure minimum (floor)
+    pressureMin_ = Config::getInstance().get("pressure_floor", 1e-10) ; 
 }
 
 void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 

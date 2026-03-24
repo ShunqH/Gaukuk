@@ -1,7 +1,7 @@
 #pragma once 
 
-#include "gaukuk.hpp"
-#include "template_array.hpp"
+#include "../gaukuk.hpp"
+#include "../template_array.hpp"
 
 namespace Gaukuk{
 
