@@ -1,16 +1,35 @@
 # define
-CXX = g++ -O3 -march=native -ffast-math -funroll-loops -ftree-vectorize
-# CXX = g++-14
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+    # macOS → use clang
+    CXX = clang++
+    OPENMP_FLAG = -Xpreprocessor -fopenmp
+    OPENMP_LIB  = -lomp
+    OPENMP_INC  = -I/opt/homebrew/opt/libomp/include
+    OPENMP_LIBPATH = -L/opt/homebrew/opt/libomp/lib
+else
+    # Linux → use g++
+    CXX = g++
+    OPENMP_FLAG = -fopenmp
+    OPENMP_LIB  =
+    OPENMP_INC  =
+    OPENMP_LIBPATH =
+endif 
 USE_OPENMP = 1
 
-CXXFLAGS = -Wall -std=c++14
+CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall \
+#            -Rpass=loop-vectorize
 INCLUDES = -Isrc
+LDFLAGS =
 
 # if USE_OPENMP=1，add -fopenmp
 ifeq ($(USE_OPENMP),1)
-    CXXFLAGS += -fopenmp
+    CXXFLAGS += $(OPENMP_FLAG) $(OPENMP_INC)
+    LDFLAGS  += $(OPENMP_LIBPATH) $(OPENMP_LIB)
 endif
 
+# paths 
 MAIN_DIR = ./src
 OBJ_DIR = ./obj
 BIN_DIR = ./bin
@@ -31,16 +50,16 @@ all: $(TARGET)
 # compile rules
 $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.cpp | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # chain rule
 $(TARGET): $(OBJS) | $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 # clean 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(TARGET)
+	rm -rf $(OBJ_DIR)/* $(TARGET)
 
 # create obj directory (if not exist)
 $(OBJ_DIR):

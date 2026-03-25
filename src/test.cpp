@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
     }
 
     
-    int steps = 1; 
+    int steps = 100; 
     auto time1 = std::chrono::high_resolution_clock::now();
     auto time2 = std::chrono::high_resolution_clock::now();
     clock_t cputime1 = clock();
