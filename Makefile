@@ -40,6 +40,7 @@ SRCS = $(MAIN_DIR)/test.cpp \
 	   $(MAIN_DIR)/sim.cpp \
 	   $(MAIN_DIR)/eos/adiabatic.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
+# 	   $(MAIN_DIR)/grid/
 
 # create object files (.o 文件)
 OBJS = $(SRCS:$(MAIN_DIR)/%.cpp=$(OBJ_DIR)/%.o)
@@ -55,7 +56,7 @@ $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.cpp | $(OBJ_DIR)
 # chain rule
 $(TARGET): $(OBJS) | $(BIN_DIR)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
+	$(CXX) $(OBJS) $(LDFLAGS) $(OPENMP_FLAG) -o $(TARGET)
 
 # clean 
 clean:

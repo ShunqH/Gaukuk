@@ -16,13 +16,13 @@ EquationOfState::EquationOfState(){
 }
 
 void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
-                int ib, int ie, int jb, int je, int kb, int ke){
+                int il, int ir, int jl, int jr, int kl, int kr){
     Real gm1 = gamma_ - 1.0;
-    #pragma omp parallel for
-    for (int k=kb; k<ke; k++){
-        for (int j=jb; j<je; j++){
-            #pragma omp simd 
-            for (int i=ib; i<ie; i++){
+#pragma omp parallel for
+    for (int k=kl; k<kr; k++){
+        for (int j=jl; j<jr; j++){
+#pragma omp simd 
+            for (int i=il; i<ir; i++){
                 Real& consDen = cons(DEN, k, j, i); 
                 Real& consMt1 = cons(MT1, k, j, i); 
                 Real& consMt2 = cons(MT2, k, j, i); 
@@ -51,13 +51,13 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim,
 }
 
 void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
-                int ib, int ie, int jb, int je, int kb, int ke){
+                int il, int ir, int jl, int jr, int kl, int kr){
     Real gm1Inv = 1.0 / (gamma_ - 1.0);
-    #pragma omp parallel for
-    for (int k=kb; k<ke; k++){
-        for (int j=jb; j<je; j++){
-            #pragma omp simd 
-            for (int i=ib; i<ie; i++){
+#pragma omp parallel for
+    for (int k=kl; k<kr; k++){
+        for (int j=jl; j<jr; j++){
+#pragma omp simd 
+            for (int i=il; i<ir; i++){
                 Real& consDen = cons(DEN, k, j, i); 
                 Real& consMt1 = cons(MT1, k, j, i); 
                 Real& consMt2 = cons(MT2, k, j, i); 

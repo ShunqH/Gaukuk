@@ -5,17 +5,12 @@
 
 // Gaukuk dependence
 #include "template_array.hpp"
-#include "eos/eos.hpp" 
+#include "grid/grid.hpp"
+#include "grid/slice.hpp" 
+#include "eos/eos.hpp"
 #include "gaukuk.hpp" 
 
 namespace Gaukuk{
-
-class Grid{
-public:
-friend class Sim; 
-    Grid(); 
-    int nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
-};
 
 class Domain{
 public:
@@ -41,12 +36,15 @@ public:
     Sim(); 
 
     EquationOfState eos; 
+    Slice slice; 
+
+    void CalFlux(); 
+    void RiemannSolver(); 
 
     void UpdateBD(); 
-    void UpdateFlux(); 
-    void RiemannSolver(); 
     void UpdateCons(); 
-// private:
+private:
+    TArray<Real> ul_, ur_;
     
 }; 
 
