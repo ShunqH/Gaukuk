@@ -13,13 +13,11 @@ class Slice{
 public:
     void ExtractXForCalFlux(const TArray<Real>& prim, 
                             TArray<Real>& ul, TArray<Real>& ur, 
-                            int nVar, int k, int j, int igb, int ige); 
-    void ExtractYForCalFlux(const TArray<Real>& prim, 
-                            TArray<Real>& ul, TArray<Real>& ur, 
-                            int nVar, int k, int j, int igb, int ige); 
-    void ExtractZForCalFlux(const TArray<Real>& prim, 
-                            TArray<Real>& ul, TArray<Real>& ur, 
-                            int nVar, int k, int j, int igb, int ige);                         
+                            int k, int j, int igb, int ige); 
+    void ExtractYForCalFlux(const TArray<Real>& prim, TArray<Real>& ur, 
+                            int k, int j, int igb, int ige); 
+    void ExtractZForCalFlux(const TArray<Real>& prim, TArray<Real>& ur, 
+                            int k, int j, int igb, int ige);                         
 
 };
 

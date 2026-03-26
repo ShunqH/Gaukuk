@@ -23,14 +23,14 @@ int main(int argc, char* argv[]){
     
     Sim sim; 
     Real den = Config::getInstance().get("rho"); 
-    Real vl1 = Config::getInstance().get("vx"); 
-    Real vl2 = Config::getInstance().get("vy"); 
-    Real vl3 = Config::getInstance().get("vz"); 
+    Real vlx = Config::getInstance().get("vx"); 
+    Real vly = Config::getInstance().get("vy"); 
+    Real vlz = Config::getInstance().get("vz"); 
     Real pre = Config::getInstance().get("pressure"); 
     Real gamma = Config::getInstance().get("gamma"); 
 
     Real engInt = pre/(gamma - 1); 
-    Real engKin = 0.5 * den * ( vl1*vl1 + vl2*vl2 + vl3*vl3 ); 
+    Real engKin = 0.5 * den * ( vlx*vlx + vly*vly + vlz*vlz ); 
     Real eng = engInt + engKin; 
 #pragma omp parallel for
     for (int k = 0; k<sim.grid.lenz; k++){
@@ -38,15 +38,15 @@ int main(int argc, char* argv[]){
             #pragma omp simd 
             for (int i = 0; i<sim.grid.lenx; i++){
                 Real& consDen = sim.cons(DEN, k, j, i); 
-                Real& consMt1 = sim.cons(MT1, k, j, i); 
-                Real& consMt2 = sim.cons(MT2, k, j, i); 
-                Real& consMt3 = sim.cons(MT3, k, j, i); 
+                Real& consMTX = sim.cons(MTX, k, j, i); 
+                Real& consMTY = sim.cons(MTY, k, j, i); 
+                Real& consMTZ = sim.cons(MTZ, k, j, i); 
                 Real& consEng = sim.cons(ENG, k, j, i); 
 
                 consDen = den; 
-                consMt1 = den * vl1; 
-                consMt2 = den * vl2; 
-                consMt3 = den * vl3; 
+                consMTX = den * vlx; 
+                consMTY = den * vly; 
+                consMTZ = den * vlz; 
                 consEng = eng; 
             }
         }
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
     // std::cout<<sim.cons.GetSize()/5<<std::endl; 
     sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
     // std::cout<<sim.cons(DEN, 5, 5, 5)<<std::endl; 
-    // std::cout<<sim.cons(MT1, 5, 5, 5)<<std::endl; 
+    // std::cout<<sim.cons(MTX, 5, 5, 5)<<std::endl; 
     // std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
     // std::cout<<eng<<std::endl; 
     std::cout<<pre<<std::endl; 
@@ -103,14 +103,14 @@ int main(int argc, char* argv[]){
 
 
 /*
-    int nVar = 5; 
+    int NVar = 5; 
     int nx = 4; 
     int ny = 4; 
     int nz = 4; 
-    TArray<double> arr1(nVar, nz, ny, nx);
-    // TArray<double> arr2(nVar, ny, nx);
+    TArray<double> arr1(NVar, nz, ny, nx);
+    // TArray<double> arr2(NVar, ny, nx);
     TArray<double> arr2; 
-    arr2.NewArray(nVar, ny, nx); 
+    arr2.NewArray(NVar, ny, nx); 
     for (size_t i = 0; i < arr1.GetSize(); i++){
         arr1(i) = i; 
     } 

@@ -25,19 +25,17 @@ Domain::Domain(const Grid& grid) :
 }
 
 
-Sim::Sim(): domain(grid), nVar(5){
+Sim::Sim(): domain(grid), flux(grid.lenx){
     t = 0;
     CFL = Config::getInstance().get("CFL"); 
     cmax = 1; 
 
-    cons.NewArray(nVar, grid.lenz, grid.leny, grid.lenx);
-    prim.NewArray(nVar, grid.lenz, grid.leny, grid.lenx);
-    flx1.NewArray(nVar, grid.lenz, grid.leny, grid.lenx+1); 
-    flx2.NewArray(nVar, grid.lenz, grid.leny+1, grid.lenx); 
-    flx3.NewArray(nVar, grid.lenz+1, grid.leny, grid.lenx); 
+    cons.NewArray(NVar, grid.lenz, grid.leny, grid.lenx);
+    prim.NewArray(NVar, grid.lenz, grid.leny, grid.lenx);
+    flx1.NewArray(NVar, grid.lenz, grid.leny, grid.lenx+1); 
+    flx2.NewArray(NVar, grid.lenz, grid.leny+1, grid.lenx); 
+    flx3.NewArray(NVar, grid.lenz+1, grid.leny, grid.lenx); 
 
-    ul_.NewArray(nVar, grid.lenx+1);
-    ur_.NewArray(nVar, grid.lenx+1);  
 }
 
 } // namespace Gaukuk

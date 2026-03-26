@@ -4,11 +4,12 @@
 #include <cstddef>  // size_t
 
 // Gaukuk dependence
+#include "gaukuk.hpp" 
 #include "template_array.hpp"
 #include "grid/grid.hpp"
 #include "grid/slice.hpp" 
 #include "eos/eos.hpp"
-#include "gaukuk.hpp" 
+#include "flux/flux.hpp"
 
 namespace Gaukuk{
 
@@ -27,7 +28,7 @@ class Sim{
 public:
     const Grid grid; 
     const Domain domain; 
-    const int nVar; 
+    Flux flux; 
     Real t, dt, cmax, CFL;  
     
     TArray<Real> cons, prim;
@@ -36,15 +37,10 @@ public:
     Sim(); 
 
     EquationOfState eos; 
-    Slice slice; 
-
-    void CalFlux(); 
-    void RiemannSolver(); 
-
+    
     void UpdateBD(); 
     void UpdateCons(); 
 private:
-    TArray<Real> ul_, ur_;
     
 }; 
 

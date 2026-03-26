@@ -13,6 +13,8 @@ EquationOfState::EquationOfState(){
     densityMin_ = Config::getInstance().get("rho_floor", 1e-10) ; 
     // pressure minimum (floor)
     pressureMin_ = Config::getInstance().get("pressure_floor", 1e-10) ; 
+    // 1/(gamma-1)
+    gm1Rec_ = 1.0/(gamma_-1);
 }
 
 void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
@@ -24,24 +26,24 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim,
 #pragma omp simd 
             for (int i=il; i<ir; i++){
                 Real& consDen = cons(DEN, k, j, i); 
-                Real& consMt1 = cons(MT1, k, j, i); 
-                Real& consMt2 = cons(MT2, k, j, i); 
-                Real& consMt3 = cons(MT3, k, j, i); 
+                Real& consMtx = cons(MTX, k, j, i); 
+                Real& consMty = cons(MTY, k, j, i); 
+                Real& consMtz = cons(MTZ, k, j, i); 
                 Real& consEng = cons(ENG, k, j, i); 
 
                 Real& primDen = prim(DEN, k, j, i); 
-                Real& primVl1 = prim(VL1, k, j, i); 
-                Real& primVl2 = prim(VL2, k, j, i); 
-                Real& primVl3 = prim(VL3, k, j, i); 
+                Real& primVlx = prim(VLX, k, j, i); 
+                Real& primVly = prim(VLY, k, j, i); 
+                Real& primVlz = prim(VLZ, k, j, i); 
                 Real& primPre = prim(PRE, k, j, i); 
 
                 consDen = (consDen > densityMin_) ? consDen : densityMin_; 
                 primDen = consDen; 
                 Real denInv = 1.0/consDen; 
-                primVl1 = consMt1 * denInv; 
-                primVl2 = consMt2 * denInv; 
-                primVl3 = consMt3 * denInv; 
-                Real engKin = 0.5 * denInv * (consMt1*consMt1 + consMt2*consMt2 + consMt3*consMt3); 
+                primVlx = consMtx * denInv; 
+                primVly = consMty * denInv; 
+                primVlz = consMtz * denInv; 
+                Real engKin = 0.5 * denInv * (consMtx*consMtx + consMty*consMty + consMtz*consMtz); 
                 primPre = gm1 * (consEng - engKin); 
                 primPre = (primPre > pressureMin_) ? primPre : pressureMin_; 
                 consEng = (primPre > pressureMin_) ? consEng : ( pressureMin_/gm1 + engKin ); 
@@ -59,29 +61,33 @@ void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons,
 #pragma omp simd 
             for (int i=il; i<ir; i++){
                 Real& consDen = cons(DEN, k, j, i); 
-                Real& consMt1 = cons(MT1, k, j, i); 
-                Real& consMt2 = cons(MT2, k, j, i); 
-                Real& consMt3 = cons(MT3, k, j, i); 
+                Real& consMtx = cons(MTX, k, j, i); 
+                Real& consMty = cons(MTY, k, j, i); 
+                Real& consMtz = cons(MTZ, k, j, i); 
                 Real& consEng = cons(ENG, k, j, i); 
 
                 const Real& primDen = prim(DEN, k, j, i); 
-                const Real& primVl1 = prim(VL1, k, j, i); 
-                const Real& primVl2 = prim(VL2, k, j, i); 
-                const Real& primVl3 = prim(VL3, k, j, i); 
+                const Real& primVlx = prim(VLX, k, j, i); 
+                const Real& primVly = prim(VLY, k, j, i); 
+                const Real& primVlz = prim(VLZ, k, j, i); 
                 const Real& primPre = prim(PRE, k, j, i); 
 
                 consDen = primDen; 
-                consMt1 = primDen * primVl1; 
-                consMt2 = primDen * primVl2; 
-                consMt3 = primDen * primVl3; 
-                consEng = primPre * gm1Inv + 0.5 * primDen * ( primVl1*primVl1 + primVl2*primVl2 + primVl3*primVl3 );
+                consMtx = primDen * primVlx; 
+                consMty = primDen * primVly; 
+                consMtz = primDen * primVlz; 
+                consEng = primPre * gm1Inv + 0.5 * primDen * ( primVlx*primVlx + primVly*primVly + primVlz*primVlz );
             }
         }
     }
 }
 
-Real EquationOfState::SoundSpeed(const Real den, const Real pre){
+inline Real EquationOfState::SoundSpeed(const Real den, const Real pre){
     return std::sqrt(gamma_*pre/den); 
+}
+
+inline Real EquationOfState::EGas(const Real den, const Real pre){
+    return pre * gm1Rec_; 
 }
 
 } // namespace Gaukuk

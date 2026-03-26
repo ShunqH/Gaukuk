@@ -2,9 +2,12 @@
 
 namespace Gaukuk{
 
+
 using Real = double; 
 
-enum ConsIDs {DEN = 0, MT1 = 1, MT2 = 2, MT3 = 3, ENG = 4, }; 
-enum PrimIDs {VL1 = 1, VL2 = 2, VL3 = 3, PRE = 4, }; 
+constexpr int NVar = 5;
+
+enum ConsIDs {DEN = 0, MTX = 1, MTY = 2, MTZ = 3, ENG = 4, }; 
+enum PrimIDs {VLX = 1, VLY = 2, VLZ = 3, PRE = 4, }; 
 
 } // namespace Gaukuk
