@@ -20,7 +20,7 @@ void Sim::CalFlux(){
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
             slice.ExtractXForCalFlux(prim, ul_, ur_, nVar, k, j, il, ir);
-            
+            RiemannSolver()
         }
     }
 }
