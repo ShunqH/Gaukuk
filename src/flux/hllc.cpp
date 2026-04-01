@@ -25,7 +25,7 @@ void Flux::RiemannSolver(const TArray<Real>& ul, const TArray<Real>& ur, const i
     const int IVLY = VLX + (direction - VLX + 1) % 3; 
     const int IVLZ = VLX + (direction - VLX + 2) % 3; 
     Real gamma = eos.GetGamma(); 
-    Real gmRec = 1/gamma; 
+    Real gmRec = eos.GetGm1Rec(); 
 
 #pragma omp simd
     for (int i=igb; i<ige; i++){
@@ -46,6 +46,7 @@ void Flux::RiemannSolver(const TArray<Real>& ul, const TArray<Real>& ur, const i
         Real al = eos.SoundSpeed(denl, prel); 
         Real ar = eos.SoundSpeed(denr, prer); 
         Real prePVRS = 0.5*(prel + prer) - 0.125*(vxr - vxl)*(denl + denr)*(al + ar); 
+        prePVRS = std::max(prePVRS, Real(0));
 
         // Step II wave speed estimates. 
         // ql = (prePVRS<=prel) ? 1 : std::sqrt( 1 + 0.5*(1 + gmRec) * (prePVRS/prel - 1) ); 
@@ -56,31 +57,43 @@ void Flux::RiemannSolver(const TArray<Real>& ul, const TArray<Real>& ur, const i
         Real qr = std::sqrt( 1 + 0.5*(1 + gmRec) * temp );
         
         Real sl = vxl - al*ql; 
-        Real sr = vxr = ar*qr; 
+        Real sr = vxr + ar*qr; 
         Real ss = ( prer - prel + denl*vxl*(sl-vxl) - denr*vxr*(sr-vxr) ) / 
                   ( denl*(sl-vxl) - denr*(sr-vxr) ) ;
         
         // Step III HLLC flux
-        Real el = eos.EGas(denl, prel) + 0.5*(vxl*vxl+vyl*vyl+vzl*vzl); 
-        Real er = eos.EGas(denr, prer) + 0.5*(vxr*vxr+vyr*vyr+vzr*vzr); 
+        Real el = eos.EGas(denl, prel) + 0.5*denl*(vxl*vxl+vyl*vyl+vzl*vzl); 
+        Real er = eos.EGas(denr, prer) + 0.5*denr*(vxr*vxr+vyr*vyr+vzr*vzr); 
 
-        Real tl = std::min(Real(0), sl)*(ss-vxl)/(sl-ss); 
+        Real cl = std::min(Real(0), sl)*(ss-vxl)/(sl-ss); 
+        Real cr = std::max(Real(0), sr)*(ss-vxr)/(sr-ss); 
+        Real selectl = (ss >= 0) ? 1.0 : 0.0;
+        Real selectr = 1.0 - selectl;
 
-        Real fl1 = denl*vxl;  
-        Real fl2 = denl*vxl*vxl + prel; 
-        Real fl3 = denl*vxl*vyl; 
-        Real fl4 = denl*vxl*vzl; 
-        Real fl5 = (el + prel)*vxl;
+        Real fl1 = denl * (vxl + cl);  
+        Real fl2 = denl * (vxl*vxl + cl*sl) + prel; 
+        Real fl3 = fl1*vyl;                             // denl*vxl*vyl     + denl*cl*vyl;
+        Real fl4 = fl1*vzl;                             // denl*vxl*vzl     + denl*cl*vzl; 
+        Real fl5 = (el + prel)*(vxl + cl) + denl*cl*ss*(sl-vxl);
 
-        Real fr1 = denr*vxr;  
-        Real fr2 = denr*vxr*vxr + prer; 
-        Real fr3 = denr*vxr*vyr; 
-        Real fr4 = denr*vxr*vzr; 
-        Real fr5 = (er + prer)*vxr;
+        Real fr1 = denr * (vxr + cr);  
+        Real fr2 = denr * (vxr*vxr + cr*sr) + prer; 
+        Real fr3 = fr1*vyr;                             // denr*vxr*vyr     + denr*cr*vyr;
+        Real fr4 = fr1*vzr;                             // denr*vxr*vzr     + denr*cr*vzr; 
+        Real fr5 = (er + prer)*(vxr + cr) + denr*cr*ss*(sr-vxr);
 
+        Real f1 = selectl * fl1 + selectr * fr1; 
+        Real f2 = selectl * fl2 + selectr * fr2; 
+        Real f3 = selectl * fl3 + selectr * fr3; 
+        Real f4 = selectl * fl4 + selectr * fr4; 
+        Real f5 = selectl * fl5 + selectr * fr5; 
 
+        flux(DEN, k, j, i) = f1; 
+        flux(IVLX, k, j, i) = f2; 
+        flux(IVLY, k, j, i) = f3; 
+        flux(IVLZ, k, j, i) = f4; 
+        flux(ENG, k, j, i) = f5; 
     }
-
 }
 
 } // namespace Gaukuk

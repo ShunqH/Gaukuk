@@ -14,7 +14,7 @@ EquationOfState::EquationOfState(){
     // pressure minimum (floor)
     pressureMin_ = Config::getInstance().get("pressure_floor", 1e-10) ; 
     // 1/(gamma-1)
-    gm1Rec_ = 1.0/(gamma_-1);
+    gm1Rec_ = 1.0 / (gamma_ - 1.0);
 }
 
 void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
@@ -54,7 +54,6 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim,
 
 void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
                 int il, int ir, int jl, int jr, int kl, int kr){
-    Real gm1Inv = 1.0 / (gamma_ - 1.0);
 #pragma omp parallel for
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
@@ -76,7 +75,7 @@ void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons,
                 consMtx = primDen * primVlx; 
                 consMty = primDen * primVly; 
                 consMtz = primDen * primVlz; 
-                consEng = primPre * gm1Inv + 0.5 * primDen * ( primVlx*primVlx + primVly*primVly + primVlz*primVlz );
+                consEng = primPre * gm1Rec_ + 0.5 * primDen * ( primVlx*primVlx + primVly*primVly + primVlz*primVlz );
             }
         }
     }

@@ -15,6 +15,7 @@ public:
     inline Real SoundSpeed(const Real den, const Real pre); 
 
     const Real GetGamma(){ return gamma_; }
+    const Real GetGm1Rec(){ return gm1Rec_; }
     inline Real EGas(const Real den, const Real pre); 
     
 private:
