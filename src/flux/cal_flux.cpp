@@ -3,7 +3,7 @@
 // Gaukuk dependence 
 #include "../flux/flux.hpp"     // class Flux   
 #include "../grid/grid.hpp"     // class grid
-#include "../grid/slice.hpp"    // class slice; void ExtractXForCalFlux
+#include "../grid/reconstruction.hpp"    // class reconstruction; void reconstructXForFlux
 
 namespace Gaukuk
 {
@@ -21,10 +21,33 @@ void Flux::CalFlux(const Grid& grid, const TArray<Real>& prim, EquationOfState& 
 #pragma omp parallel for
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
-            slice.ExtractXForCalFlux(prim, ul_, ur_, k, j, il, ir);
+            recon.ReconstructXForFlux(prim, ul_, ur_, k, j, il, ir);
             RiemannSolver(ul_, ur_, VLX, eos, flx1, k, j, il, ir); 
         }
     }
+
+    // Flux on y direction 
+#pragma omp parallel for
+    for (int k=kl; k<kr; k++){
+        recon.ReconstructYZForFlux(prim, ul_, k, jl, il, ir);
+        for (int j=jl; j<jr+1; j++){
+            recon.ReconstructYZForFlux(prim, ur_, k, j+1, il, ir);
+            RiemannSolver(ul_, ur_, VLX, eos, flx2, k, j, il, ir); 
+            ul_.Swap(ur_); 
+        }
+    }
+
+    // Flux on z direction 
+#pragma omp parallel for
+    for (int j=jl; j<jr+1; j++){
+        recon.ReconstructYZForFlux(prim, ul_, kl, j, il, ir);
+        for (int k=kl; k<kr; k++){
+            recon.ReconstructYZForFlux(prim, ur_, k+1, j, il, ir);
+            RiemannSolver(ul_, ur_, VLX, eos, flx3, k, j, il, ir); 
+            ul_.Swap(ur_); 
+        }
+    }
 }
+
 
 } // namespace Gaukuk

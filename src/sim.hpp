@@ -7,7 +7,7 @@
 #include "gaukuk.hpp" 
 #include "template_array.hpp"
 #include "grid/grid.hpp"
-#include "grid/slice.hpp" 
+#include "grid/reconstruction.hpp" 
 #include "eos/eos.hpp"
 #include "flux/flux.hpp"
 

@@ -6,7 +6,7 @@
 #include "../gaukuk.hpp"            //Real 
 #include "../template_array.hpp"    // TArray
 #include "../grid/grid.hpp"         // class grid
-#include "../grid/slice.hpp"        // class slice; void ExtractXForCalFlux 
+#include "../grid/reconstruction.hpp"        // class slice; void ExtractXForCalFlux 
 #include "../eos/eos.hpp"   // EquationOfState
 
 namespace Gaukuk{
@@ -24,7 +24,7 @@ public:
                        EquationOfState& eos, TArray<Real>& flux, 
                        int k, int j, int igb, int ige); 
 private:
-    Slice slice; 
+    Reconstruction recon; 
     TArray<Real> ul_, ur_;
 };
     
