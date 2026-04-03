@@ -16,7 +16,8 @@ void Sim::UpdateCons(){
     Real dtdx = dt/domain.dx; 
     Real dtdy = dt/domain.dy; 
     Real dtdz = dt/domain.dz; 
-for (int ivar=DEN; ivar<ENG+1; ivar++){
+    
+for (int ivar=DEN; ivar<=ENG; ivar++){
 #pragma omp parallel for 
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
