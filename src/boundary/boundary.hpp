@@ -15,23 +15,24 @@ using BoundaryFunc = void (*)(TArray<Real>&, Grid&);
 public:
 friend class Sim; 
     Boundary(); 
-    BoundaryFunc bdxr; 
     BoundaryFunc bdxl; 
-    BoundaryFunc bdyr; 
+    BoundaryFunc bdxr; 
     BoundaryFunc bdyl; 
-    BoundaryFunc bdzr; 
+    BoundaryFunc bdyr; 
     BoundaryFunc bdzl; 
+    BoundaryFunc bdzr; 
+    void UpdateBD(TArray<Real>& cons, Grid& grid); 
 
     // simple copy boundary condition
-    void OutflowCopyXL(TArray<Real>& cons, Grid& grid); 
-    void OutflowCopyXR(TArray<Real>& cons, Grid& grid); 
-    void OutflowCopyYL(TArray<Real>& cons, Grid& grid); 
-    void OutflowCopyYR(TArray<Real>& cons, Grid& grid); 
-    void OutflowCopyZL(TArray<Real>& cons, Grid& grid); 
-    void OutflowCopyZR(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyXL(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyXR(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyYL(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyYR(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyZL(TArray<Real>& cons, Grid& grid); 
+    static void OutflowCopyZR(TArray<Real>& cons, Grid& grid); 
 
-    void SelfDefineCopyXL(TArray<Real>& cons, Grid& grid); 
-    void SelfDefineCopyXR(TArray<Real>& cons, Grid& grid); 
+    static void SelfDefineCopyXL(TArray<Real>& cons, Grid& grid); 
+    static void SelfDefineCopyXR(TArray<Real>& cons, Grid& grid); 
 };
 
 

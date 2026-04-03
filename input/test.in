@@ -26,3 +26,11 @@ NX              = 128           # resolution on x
 NY              = 128           # resolution on y    
 NZ              = 128           # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
+
+# boundary 
+xleft           = 0             # 0 for copy 
+xright          = 0             # 0 for copy 
+yleft           = 0             # 0 for copy 
+yright          = 0             # 0 for copy 
+zleft           = 0             # 0 for copy 
+zright          = 0             # 0 for copy 

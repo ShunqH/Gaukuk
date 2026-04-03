@@ -10,6 +10,7 @@
 #include "grid/reconstruction.hpp" 
 #include "eos/eos.hpp"
 #include "flux/flux.hpp"
+#include "boundary/boundary.hpp" 
 
 namespace Gaukuk{
 
@@ -37,8 +38,8 @@ public:
     Sim(); 
 
     EquationOfState eos; 
+    Boundary boundary; 
     
-    void UpdateBD(); 
     void UpdateCons(); 
 private:
     

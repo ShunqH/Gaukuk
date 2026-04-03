@@ -18,7 +18,7 @@ void Flux::CalFlux(const Grid& grid, const TArray<Real>& prim, EquationOfState& 
     int kr = grid.ke; 
     
     // Flux on x direction 
-#pragma omp parallel for
+#pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
             recon.ReconstructXForFlux(prim, ul_, ur_, k, j, il, ir);
@@ -27,7 +27,7 @@ void Flux::CalFlux(const Grid& grid, const TArray<Real>& prim, EquationOfState& 
     }
 
     // Flux on y direction 
-#pragma omp parallel for
+#pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
         recon.ReconstructYZForFlux(prim, ul_, k, jl, il, ir);
         for (int j=jl; j<jr+1; j++){
@@ -38,7 +38,7 @@ void Flux::CalFlux(const Grid& grid, const TArray<Real>& prim, EquationOfState& 
     }
 
     // Flux on z direction 
-#pragma omp parallel for
+#pragma omp parallel for collapse(2) schedule(static)
     for (int j=jl; j<jr+1; j++){
         recon.ReconstructYZForFlux(prim, ul_, kl, j, il, ir);
         for (int k=kl; k<kr; k++){
