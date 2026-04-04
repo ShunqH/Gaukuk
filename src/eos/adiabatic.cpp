@@ -10,15 +10,20 @@ EquationOfState::EquationOfState(){
     // read adiabatic index gamma from input file
     gamma_ = Config::getInstance().get("gamma") ; 
     // density minimum (floor)
-    densityMin_ = Config::getInstance().get("rho_floor", 1e-10) ; 
+    densityMin_ = Config::getInstance().get("rho_floor", 1e-16) ; 
     // pressure minimum (floor)
-    pressureMin_ = Config::getInstance().get("pressure_floor", 1e-10) ; 
+    pressureMin_ = Config::getInstance().get("pressure_floor", 1e-16) ; 
     // 1/(gamma-1)
     gm1Rec_ = 1.0 / (gamma_ - 1.0);
 }
 
-void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
-                int il, int ir, int jl, int jr, int kl, int kr){
+void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const Grid& grid){
+    int il = grid.igb;                      // first ghost cell left side
+    int ir = grid.ige;                      // last ghost cell right side + 1
+    int jl = grid.jgb;                      // first ghost cell left side
+    int jr = grid.jge;                      // last ghost cell right side + 1
+    int kl = grid.kgb;                      // first ghost cell left side
+    int kr = grid.kge;                      // last ghost cell right side + 1
     Real gm1 = gamma_ - 1.0;
 #pragma omp parallel for
     for (int k=kl; k<kr; k++){
@@ -52,8 +57,13 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim,
     }
 }
 
-void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
-                int il, int ir, int jl, int jr, int kl, int kr){
+void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, const Grid& grid){
+    int il = grid.igb;                      // first ghost cell left side
+    int ir = grid.ige;                      // last ghost cell right side + 1
+    int jl = grid.jgb;                      // first ghost cell left side
+    int jr = grid.jge;                      // last ghost cell right side + 1
+    int kl = grid.kgb;                      // first ghost cell left side
+    int kr = grid.kge;                      // last ghost cell right side + 1
 #pragma omp parallel for
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){

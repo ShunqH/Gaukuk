@@ -27,22 +27,22 @@ private:
 
 class Sim{
 public:
+    Sim(); 
     const Grid grid; 
     const Domain domain; 
     Flux flux; 
+
     Real t, dt, cmax, CFL;  
-    
     TArray<Real> cons, prim;
     TArray<Real> flx1, flx2, flx3; 
-
-    Sim(); 
 
     EquationOfState eos; 
     Boundary boundary; 
     
-    void UpdateCons(); 
+    void ForwardEuler(); 
+    void RK2(); 
 private:
-    
+    TArray<Real> consTemp1_, consTemp2_; 
 }; 
 
 } // namespace Gaukuk

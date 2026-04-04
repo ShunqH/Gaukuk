@@ -12,6 +12,7 @@ gamma           = 1.4           # for adiabatic eos
 
 # simulation 
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
+rk_order        = 1             # 1 : forward euler; 2 : rk2; 3: rk3
 
 # domain size 
 xmin            = -0.5 

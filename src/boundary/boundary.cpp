@@ -57,7 +57,7 @@ Boundary::Boundary(){
     }
 }
 
-void Boundary::UpdateBD(TArray<Real>& cons, Grid& grid){
+void Boundary::UpdateBD(TArray<Real>& cons, const Grid& grid){
     bdxl(cons, grid); 
     bdxr(cons, grid); 
     bdyl(cons, grid); 

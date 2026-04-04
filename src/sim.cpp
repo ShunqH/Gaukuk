@@ -36,6 +36,12 @@ Sim::Sim(): domain(grid), flux(grid.lenx){
     flx2.NewArray(NVar, grid.lenz, grid.leny+1, grid.lenx); 
     flx3.NewArray(NVar, grid.lenz+1, grid.leny, grid.lenx); 
 
+    if (static_cast<int>(Config::getInstance().get("rk_order")) >= 2) {
+        consTemp1_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
+    }
+    if (static_cast<int>(Config::getInstance().get("rk_order")) >= 3) {
+        consTemp2_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
+    }
 }
 
 } // namespace Gaukuk

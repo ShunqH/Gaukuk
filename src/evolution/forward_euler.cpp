@@ -5,7 +5,11 @@
 namespace Gaukuk
 {
 
-void Sim::UpdateCons(){
+void Sim::ForwardEuler(){
+    boundary.UpdateBD(cons, grid); 
+    eos.ConsToPrim(cons, prim, grid); 
+    flux.CalFlux(grid, prim, eos, flx1, flx2, flx3); 
+    
     int il = grid.ib; 
     int ir = grid.ie; 
     int jl = grid.jb; 
@@ -32,8 +36,8 @@ void Sim::UpdateCons(){
                     const Real hr = flx3(ivar, k+1, j, i); 
 
                     u = u - dtdx * ( fr - fl ) 
-                        - dtdy * ( gr - gl ) 
-                        - dtdz * ( hr - hl ) ; 
+                          - dtdy * ( gr - gl ) 
+                          - dtdz * ( hr - hl ) ; 
                 }
             }
         }

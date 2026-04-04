@@ -13,7 +13,7 @@ namespace Gaukuk
 //
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::OutflowCopyXL(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyXL(TArray<Real>& cons, const Grid& grid){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
@@ -41,7 +41,7 @@ void Boundary::OutflowCopyXL(TArray<Real>& cons, Grid& grid){
 
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::OutflowCopyXR(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyXR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
@@ -69,7 +69,7 @@ void Boundary::OutflowCopyXR(TArray<Real>& cons, Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, left side 
-void Boundary::OutflowCopyYL(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyYL(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
@@ -97,7 +97,7 @@ void Boundary::OutflowCopyYL(TArray<Real>& cons, Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, right side 
-void Boundary::OutflowCopyYR(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyYR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
@@ -125,7 +125,7 @@ void Boundary::OutflowCopyYR(TArray<Real>& cons, Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, left side 
-void Boundary::OutflowCopyZL(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyZL(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
@@ -153,7 +153,7 @@ void Boundary::OutflowCopyZL(TArray<Real>& cons, Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, right side 
-void Boundary::OutflowCopyZR(TArray<Real>& cons, Grid& grid){
+void Boundary::OutflowCopyZR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 

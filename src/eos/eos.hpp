@@ -2,6 +2,7 @@
 
 #include "../gaukuk.hpp"
 #include "../template_array.hpp"
+#include "../grid/grid.hpp"
 
 namespace Gaukuk{
 
@@ -9,9 +10,9 @@ class EquationOfState{
 public:
     EquationOfState(); 
     void ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
-                    int ib, int ie, int jb, int je, int kb, int ke); 
+                    const Grid& grid); 
     void PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
-                    int ib, int ie, int jb, int je, int kb, int ke); 
+                    const Grid& grid); 
     inline Real SoundSpeed(const Real den, const Real pre); 
 
     const Real GetGamma(){ return gamma_; }
