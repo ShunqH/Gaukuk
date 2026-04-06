@@ -7,7 +7,8 @@ namespace Gaukuk
 
 void Sim::ForwardEuler(){
     boundary.UpdateBD(cons, grid); 
-    eos.ConsToPrim(cons, prim, grid); 
+    eos.ConsToPrim(cons, prim, grid, cmax); 
+    dt = CFL * domain.drmin / cmax; 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3); 
     
     int il = grid.ib; 

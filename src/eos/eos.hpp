@@ -11,6 +11,8 @@ public:
     EquationOfState(); 
     void ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
                     const Grid& grid); 
+    void ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
+                    const Grid& grid, Real& cmax); 
     void PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
                     const Grid& grid); 
     inline Real SoundSpeed(const Real den, const Real pre); 

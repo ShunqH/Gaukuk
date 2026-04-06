@@ -21,7 +21,7 @@ friend class Sim;
 
 private:
     Real xmin, xmax, ymin, ymax, zmin, zmax; 
-    Real dx, dy, dz; 
+    Real dx, dy, dz, drmin; 
     TArray<Real> xGrid, yGrid, zGrid; 
 };
 

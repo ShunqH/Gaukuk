@@ -1,5 +1,6 @@
 // CPP header
 #include <stdexcept>    // runtime_error
+#include <cmath>        // std::min()
 
 #include "sim.hpp"
 #include "utils/utils.hpp"
@@ -16,6 +17,7 @@ Domain::Domain(const Grid& grid) :
     dx = ( xmax - xmin ) / grid.nx; 
     dy = ( ymax - ymin ) / grid.ny; 
     dz = ( zmax - zmin ) / grid.nz; 
+    drmin = std::min(dx, dy, dz); 
     xGrid.NewArray(grid.nx); 
     yGrid.NewArray(grid.ny); 
     zGrid.NewArray(grid.nz); 
