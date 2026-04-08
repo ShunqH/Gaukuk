@@ -3,7 +3,7 @@ gamma           = 1.4           # for adiabatic eos
 
 # simulation 
 tmax            = 0.1           # total time 
-stepmax         = -1            # unlimitted
+stepmax         = 10            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 1             # 1 : forward euler; 2 : rk2; 3: rk3
 dtoutput        = 0.01           # 

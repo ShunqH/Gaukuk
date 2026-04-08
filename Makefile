@@ -47,7 +47,9 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/grid/reconstruction.cpp \
 	   $(MAIN_DIR)/setup/setup_shock_tube.cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
-	   $(MAIN_DIR)/utils/read_config.cpp 
+	   $(MAIN_DIR)/utils/read_config.cpp \
+	   $(MAIN_DIR)/utils/debug.cpp 
+
 
 # 	   $(MAIN_DIR)/grid/
 

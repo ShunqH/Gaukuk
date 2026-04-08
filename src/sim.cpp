@@ -29,7 +29,7 @@ Domain::Domain(const Grid& grid) :
 
 
 Sim::Sim(): domain(grid), flux(grid.lenx), 
-            t(0), dt(0), dtUntilOutput(0), cmax(1){
+            t(0), dt(1e10), dtUntilOutput(1e10), cmax(1e-16){
     CFL = Config::getInstance().get("CFL"); 
 
     cons.NewArray(NVar, grid.lenz, grid.leny, grid.lenx);
@@ -50,15 +50,19 @@ Sim::Sim(): domain(grid), flux(grid.lenx),
 }
 
 void Sim::Advance(Real dtoutput){
-    Real tNext = t + dtoutput; 
-    dtUntilOutput = dtoutput; 
-    while (t<tNext){
-        (this->*integrator_)(); 
-        t += dt; 
-        dtUntilOutput = tNext - t; 
-        std::cout<<"dt = "<< dt << std::endl; 
-        std::cout<<"cmax = "<< cmax << std::endl; 
-    }
+    // Real tNext = t + dtoutput; 
+    // dtUntilOutput = dtoutput; 
+    // while (t<tNext){
+    //     (this->*integrator_)(); 
+    //     t += dt; 
+    //     dtUntilOutput = tNext - t; 
+    //     std::cout<<"dt = "<< dt << std::endl; 
+    //     // std::cout<<"cmax = "<< cmax << std::endl; 
+    // }
+    (this->*integrator_)(); 
+    t += dt; 
+    std::cout<<"dt = "<< dt << std::endl; 
+    std::cout<<"cmax = "<< cmax << std::endl; 
 }
 
 } // namespace Gaukuk

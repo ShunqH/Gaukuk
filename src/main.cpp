@@ -21,6 +21,7 @@ int main(int argc, char* argv[]){
 
     Sim sim; 
     sim.Setup(); 
+    sim.boundary.UpdateBD(sim.cons, sim.grid);
 
     int step = 0; 
     Real tnow = sim.GetTime(); 

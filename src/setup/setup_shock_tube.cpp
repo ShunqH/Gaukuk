@@ -28,7 +28,8 @@ void Sim::Setup(){
         for (int j=jl; j<jr; j++){
 #pragma omp simd
             for (int i=il; i<ir; i++){
-                Real xNow = domain.xc(i); 
+                int iForXc = i - grid.ib; 
+                Real xNow = domain.xc(iForXc); 
                 Real rhoNow = (xNow<x0) ? rhoLeft : rhoRight ; 
                 Real preNow = (xNow<x0) ? preLeft : preRight ; 
 
