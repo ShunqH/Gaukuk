@@ -1,0 +1,36 @@
+// CPP header
+#include <algorithm> 
+#include <iostream>     // std::cout; std::endl; std::cerr
+
+// Gaukuk dependence
+#include "gaukuk.hpp" 
+#include "sim.hpp" 
+
+int main(int argc, char* argv[]){
+    using namespace Gaukuk; 
+
+    if (argc < 3 || std::string(argv[1]) != "-i") {
+        std::cerr << "Usage: " << argv[0] << " -i input.in" << std::endl;
+        return 1;
+    }
+    Config::getInstance().loadFromFile(argv[2]);
+
+    Real tmax = Config::getInstance().get("tmax"); 
+    Real dtoutput = Config::getInstance().get("dtoutput"); 
+    int stepmax = Config::getInstance().get("stepmax"); 
+
+    Sim sim; 
+    sim.Setup(); 
+
+    int step = 0; 
+    Real tnow = sim.GetTime(); 
+    sim.WriteCons(step); 
+    while (tnow<tmax && (stepmax<0 || step<stepmax)){
+        dtoutput = std::min(dtoutput, tmax-tnow); 
+        sim.Advance(dtoutput); 
+        tnow = sim.GetTime();
+        step ++;  
+        sim.WriteCons(step); 
+        // std::cout<<"dt = "<< sim.Getdt() << std::endl; 
+    }
+}

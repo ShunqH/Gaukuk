@@ -71,6 +71,9 @@ public:
         return pdata_[i + n1_*(j + n2_*(k + n3_*n))]; 
     }
 
+    T* data() noexcept { return pdata_; }
+    const T* data() const noexcept { return pdata_; }
+
     void Swap(TArray& other) noexcept; 
     void DeleteArray() noexcept; 
 private:

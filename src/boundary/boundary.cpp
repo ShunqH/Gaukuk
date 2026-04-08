@@ -16,54 +16,54 @@ Boundary::Boundary(){
     int typeBDZR = static_cast<int>(Config::getInstance().get("zright")); 
     // X left boundary registration
     if (typeBDXL == 0){
-        bdxr = &OutflowCopyXL;
+        Bdxl = &OutflowCopyXL;
     }else{
-        bdxr = &OutflowCopyXL;
+        Bdxl = &OutflowCopyXL;
     }
 
     // X right boundary registration
     if (typeBDXR == 0){
-        bdxr = &OutflowCopyXR;
+        Bdxr = &OutflowCopyXR;
     }else{
-        bdxr = &OutflowCopyXR;
+        Bdxr = &OutflowCopyXR;
     }
 
     // y left boundary registration
     if (typeBDYL == 0){
-        bdyr = &OutflowCopyYL;
+        Bdyl = &OutflowCopyYL;
     }else{
-        bdyr = &OutflowCopyYL;
+        Bdyl = &OutflowCopyYL;
     }
 
     // y right boundary registration
     if (typeBDYR == 0){
-        bdyr = &OutflowCopyYR;
+        Bdyr = &OutflowCopyYR;
     }else{
-        bdyr = &OutflowCopyYR;
+        Bdyr = &OutflowCopyYR;
     }
 
     // z left boundary registration
-    if (typeBDYL == 0){
-        bdyr = &OutflowCopyYL;
+    if (typeBDZL == 0){
+        Bdzl = &OutflowCopyYL;
     }else{
-        bdyr = &OutflowCopyYL;
+        Bdzl = &OutflowCopyYL;
     }
 
     // z right boundary registration
-    if (typeBDYR == 0){
-        bdyr = &OutflowCopyYR;
+    if (typeBDZR == 0){
+        Bdzr = &OutflowCopyYR;
     }else{
-        bdyr = &OutflowCopyYR;
+        Bdzr = &OutflowCopyYR;
     }
 }
 
 void Boundary::UpdateBD(TArray<Real>& cons, const Grid& grid){
-    bdxl(cons, grid); 
-    bdxr(cons, grid); 
-    bdyl(cons, grid); 
-    bdyr(cons, grid); 
-    bdzl(cons, grid); 
-    bdzr(cons, grid); 
+    Bdxl(cons, grid); 
+    Bdxr(cons, grid); 
+    Bdyl(cons, grid); 
+    Bdyr(cons, grid); 
+    Bdzl(cons, grid); 
+    Bdzr(cons, grid); 
 }
 
 } // namespace Gaukuk

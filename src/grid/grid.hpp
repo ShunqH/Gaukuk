@@ -16,13 +16,14 @@ friend class Sim;
     int ib, ie, jb, je, kb, ke;         // activate cell begin and end ids 
     int iib, iie, jjb, jje, kkb, kke;   // flux (half) cell begin and end ids
 
-    Grid() : 
-    nx(static_cast<int>(Config::getInstance().get("NX"))),
-    ny(static_cast<int>(Config::getInstance().get("NY"))),
-    nz(static_cast<int>(Config::getInstance().get("NZ"))),
-    nGhost(static_cast<int>(Config::getInstance().get("NGhost"))) {
-        if (nx <= 0 || ny <= 0 || nz <= 0 || nGhost < 0)
+    Grid() {
+        nx = Config::getInstance().get("NX"); 
+        ny = Config::getInstance().get("NY"); 
+        nz = Config::getInstance().get("NZ"); 
+        nGhost = Config::getInstance().get("NGhost"); 
+        if (nx <= 0 || ny <= 0 || nz <= 0 || nGhost < 0){
             throw std::runtime_error("Invalid grid parameters from config");
+        }
         lenx = nx + 2 * nGhost;
         leny = ny + 2 * nGhost;
         lenz = nz + 2 * nGhost;

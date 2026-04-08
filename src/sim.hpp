@@ -22,26 +22,36 @@ friend class Sim;
 private:
     Real xmin, xmax, ymin, ymax, zmin, zmax; 
     Real dx, dy, dz, drmin; 
-    TArray<Real> xGrid, yGrid, zGrid; 
+    TArray<Real> xc, yc, zc;       // cell center 
 };
 
 class Sim{
 public:
+
     Sim(); 
     const Grid grid; 
     const Domain domain; 
     Flux flux; 
 
-    Real t, dt, cmax, CFL;  
     TArray<Real> cons, prim;
     TArray<Real> flx1, flx2, flx3; 
 
     EquationOfState eos; 
     Boundary boundary; 
     
-    void ForwardEuler(); 
-    void RK2(); 
+    void Setup(); 
+    void Advance(Real dtoutput);
+    
+    void WriteCons(const int outputID); 
+
+    Real GetTime(){ return t; };
+    Real Getdt(){ return dt; };
 private:
+using IntegratorFunc = void (Sim::*)();
+    Real t, dt, dtUntilOutput, cmax, CFL; 
+    IntegratorFunc integrator_; 
+    void ForwardEuler_(); 
+    // void RK2(); 
     TArray<Real> consTemp1_, consTemp2_; 
 }; 
 

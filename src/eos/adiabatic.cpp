@@ -143,11 +143,11 @@ void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, c
     }
 }
 
-inline Real EquationOfState::SoundSpeed(const Real den, const Real pre){
+Real EquationOfState::SoundSpeed(const Real den, const Real pre){
     return std::sqrt(gamma_*pre/den); 
 }
 
-inline Real EquationOfState::EGas(const Real den, const Real pre){
+Real EquationOfState::EGas(const Real den, const Real pre){
     return pre * gm1Rec_; 
 }
 

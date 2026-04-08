@@ -36,10 +36,19 @@ BIN_DIR = ./bin
 TARGET = $(BIN_DIR)/gaukuk.sim
 
 # obtain source files (.cpp files)
-SRCS = $(MAIN_DIR)/test.cpp \
+SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/sim.cpp \
 	   $(MAIN_DIR)/eos/adiabatic.cpp \
+	   $(MAIN_DIR)/flux/cal_flux.cpp \
+	   $(MAIN_DIR)/flux/hllc.cpp \
+	   $(MAIN_DIR)/evolution/forward_euler.cpp \
+	   $(MAIN_DIR)/boundary/boundary.cpp \
+	   $(MAIN_DIR)/boundary/outflow_copy.cpp \
+	   $(MAIN_DIR)/grid/reconstruction.cpp \
+	   $(MAIN_DIR)/setup/setup_shock_tube.cpp \
+	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
+
 # 	   $(MAIN_DIR)/grid/
 
 # create object files (.o 文件)

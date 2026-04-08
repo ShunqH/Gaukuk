@@ -2,7 +2,6 @@
 
 namespace Gaukuk{
 
-
 using Real = double; 
 
 constexpr int NVar = 5;

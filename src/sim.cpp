@@ -1,6 +1,7 @@
 // CPP header
 #include <stdexcept>    // runtime_error
-#include <cmath>        // std::min()
+#include <algorithm>    // std::min()
+#include <iostream>     // std::cout; std::endl; std::cerr
 
 #include "sim.hpp"
 #include "utils/utils.hpp"
@@ -17,20 +18,19 @@ Domain::Domain(const Grid& grid) :
     dx = ( xmax - xmin ) / grid.nx; 
     dy = ( ymax - ymin ) / grid.ny; 
     dz = ( zmax - zmin ) / grid.nz; 
-    drmin = std::min(dx, dy, dz); 
-    xGrid.NewArray(grid.nx); 
-    yGrid.NewArray(grid.ny); 
-    zGrid.NewArray(grid.nz); 
-    for (int i=0; i<grid.nx; i++) { xGrid(i) = xmin + 0.5*dx + i*dx; }
-    for (int j=0; j<grid.ny; j++) { yGrid(j) = ymin + 0.5*dy + j*dy; }
-    for (int k=0; k<grid.nz; k++) { zGrid(k) = zmin + 0.5*dz + k*dz; }
+    drmin = std::min(std::min(dx, dy), dz); 
+    xc.NewArray(grid.nx); 
+    yc.NewArray(grid.ny); 
+    zc.NewArray(grid.nz); 
+    for (int i=0; i<grid.nx; i++) { xc(i) = xmin + 0.5*dx + i*dx; }
+    for (int j=0; j<grid.ny; j++) { yc(j) = ymin + 0.5*dy + j*dy; }
+    for (int k=0; k<grid.nz; k++) { zc(k) = zmin + 0.5*dz + k*dz; }
 }
 
 
-Sim::Sim(): domain(grid), flux(grid.lenx){
-    t = 0;
+Sim::Sim(): domain(grid), flux(grid.lenx), 
+            t(0), dt(0), dtUntilOutput(0), cmax(1){
     CFL = Config::getInstance().get("CFL"); 
-    cmax = 1; 
 
     cons.NewArray(NVar, grid.lenz, grid.leny, grid.lenx);
     prim.NewArray(NVar, grid.lenz, grid.leny, grid.lenx);
@@ -38,11 +38,26 @@ Sim::Sim(): domain(grid), flux(grid.lenx){
     flx2.NewArray(NVar, grid.lenz, grid.leny+1, grid.lenx); 
     flx3.NewArray(NVar, grid.lenz+1, grid.leny, grid.lenx); 
 
-    if (static_cast<int>(Config::getInstance().get("rk_order")) >= 2) {
+
+    if (static_cast<int>(Config::getInstance().get("integrator")) == 1) {
+        integrator_ = &Sim::ForwardEuler_; 
+    }else if (static_cast<int>(Config::getInstance().get("integrator")) == 2) {
         consTemp1_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
-    }
-    if (static_cast<int>(Config::getInstance().get("rk_order")) >= 3) {
+    }else if (static_cast<int>(Config::getInstance().get("integrator")) == 3) {
+        consTemp1_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
         consTemp2_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
+    }
+}
+
+void Sim::Advance(Real dtoutput){
+    Real tNext = t + dtoutput; 
+    dtUntilOutput = dtoutput; 
+    while (t<tNext){
+        (this->*integrator_)(); 
+        t += dt; 
+        dtUntilOutput = tNext - t; 
+        std::cout<<"dt = "<< dt << std::endl; 
+        std::cout<<"cmax = "<< cmax << std::endl; 
     }
 }
 

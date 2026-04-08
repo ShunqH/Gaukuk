@@ -15,12 +15,12 @@ using BoundaryFunc = void (*)(TArray<Real>&, const Grid&);
 public:
 friend class Sim; 
     Boundary(); 
-    BoundaryFunc bdxl; 
-    BoundaryFunc bdxr; 
-    BoundaryFunc bdyl; 
-    BoundaryFunc bdyr; 
-    BoundaryFunc bdzl; 
-    BoundaryFunc bdzr; 
+    BoundaryFunc Bdxl; 
+    BoundaryFunc Bdxr; 
+    BoundaryFunc Bdyl; 
+    BoundaryFunc Bdyr; 
+    BoundaryFunc Bdzl; 
+    BoundaryFunc Bdzr; 
     void UpdateBD(TArray<Real>& cons, const Grid& grid); 
 
     // simple copy boundary condition

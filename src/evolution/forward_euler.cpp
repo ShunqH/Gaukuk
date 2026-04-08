@@ -1,3 +1,7 @@
+// C++ Header
+#include <algorithm>        //std::min 
+// #include <iostream>     // std::cout; std::endl; std::cerr
+
 // Gaukuk dependence
 #include "../gaukuk.hpp" 
 #include "../sim.hpp"
@@ -5,10 +9,12 @@
 namespace Gaukuk
 {
 
-void Sim::ForwardEuler(){
+void Sim::ForwardEuler_(){
     boundary.UpdateBD(cons, grid); 
+    cmax = 1e-16;
     eos.ConsToPrim(cons, prim, grid, cmax); 
     dt = CFL * domain.drmin / cmax; 
+    dt = std::min(dt, dtUntilOutput); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3); 
     
     int il = grid.ib; 

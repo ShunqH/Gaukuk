@@ -1,18 +1,12 @@
-# config
-
-# initialization
-rho             = 0.5 
-vx              = 0.3  
-vy              = 0.6 
-vz              = 0.8 
-pressure        = 1.2  
-
 # equation of state 
 gamma           = 1.4           # for adiabatic eos 
 
 # simulation 
+tmax            = 0.1           # total time 
+stepmax         = -1            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 1             # 1 : forward euler; 2 : rk2; 3: rk3
+dtoutput        = 0.01           # 
 
 # domain size 
 xmin            = -0.5 
@@ -24,8 +18,8 @@ zmax            = 0.5
 
 # mesh 
 NX              = 128           # resolution on x   
-NY              = 128           # resolution on y    
-NZ              = 128           # resolution on z  
+NY              = 16            # resolution on y    
+NZ              = 16            # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
 
 # boundary 
@@ -35,3 +29,10 @@ yleft           = 0             # 0 for copy
 yright          = 0             # 0 for copy 
 zleft           = 0             # 0 for copy 
 zright          = 0             # 0 for copy 
+
+# problem setup
+x0              = 0             # center
+rhoLeft         = 1.0           # 
+pressureLeft    = 1.0           # 
+rhoRight        = 0.125         # 
+pressureRight   = 0.1           #           

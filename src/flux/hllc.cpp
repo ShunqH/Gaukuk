@@ -24,7 +24,7 @@ void Flux::RiemannSolver(const TArray<Real>& ul, const TArray<Real>& ur, const i
     const int IVLX = VLX + (direction - VLX + 0) % 3; 
     const int IVLY = VLX + (direction - VLX + 1) % 3; 
     const int IVLZ = VLX + (direction - VLX + 2) % 3; 
-    Real gamma = eos.GetGamma(); 
+    // Real gamma = eos.GetGamma(); 
     Real gmRec = eos.GetGm1Rec(); 
 
 #pragma omp simd

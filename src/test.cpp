@@ -59,8 +59,8 @@ int main(int argc, char* argv[]){
     clock_t cputime1 = clock();
     clock_t cputime2 = clock();
     for (int n=0; n<steps; n++){
-        sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz);
-        sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
+        sim.eos.ConsToPrim(sim.cons, sim.prim, sim.grid);
+        sim.eos.PrimToCons(sim.prim, sim.cons, sim.grid); 
     }
 
     // std::cout<<sim.cons.GetN1()<<std::endl; 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
     // std::cout<<sim.cons.GetN3()<<std::endl; 
     // std::cout<<sim.cons.GetN4()<<std::endl; 
     // std::cout<<sim.cons.GetSize()/5<<std::endl; 
-    sim.eos.ConsToPrim(sim.cons, sim.prim, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
+    sim.eos.ConsToPrim(sim.cons, sim.prim, sim.grid); 
     // std::cout<<sim.cons(DEN, 5, 5, 5)<<std::endl; 
     // std::cout<<sim.cons(MTX, 5, 5, 5)<<std::endl; 
     // std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
 
     std::cout<<eng<<std::endl; 
     std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
-    sim.eos.PrimToCons(sim.prim, sim.cons, 0, sim.grid.nx, 0, sim.grid.ny, 0, sim.grid.nz); 
+    sim.eos.PrimToCons(sim.prim, sim.cons, sim.grid); 
     std::cout<<sim.cons(ENG, 5, 5, 5)<<std::endl; 
 
     std::cout<<gamma*pre/den<<std::endl; 
