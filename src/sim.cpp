@@ -56,7 +56,7 @@ void Sim::Advance(Real dtoutput){
         (this->*integrator_)(); 
         t += dt; 
         dtUntilOutput = tNext - t; 
-        std::cout<<"dt = "<< dt << std::endl; 
+        // std::cout<<"dt = "<< dt << std::endl; 
         // std::cout<<"cmax = "<< cmax << std::endl; 
     }
     // (this->*integrator_)(); 

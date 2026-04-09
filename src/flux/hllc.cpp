@@ -1,6 +1,6 @@
 // C++ headers 
-#include <cmath>            // sqrt
-#include <algorithm>        // max 
+#include <cmath>            // std::sqrt()
+#include <algorithm>        // std::max() 
 #include <iostream>     // std::cout; std::endl; std::cerr
 
 // Gaukuk dependence

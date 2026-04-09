@@ -143,12 +143,4 @@ void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, c
     }
 }
 
-Real EquationOfState::SoundSpeed(const Real den, const Real pre){
-    return std::sqrt(gamma_*pre/den); 
-}
-
-Real EquationOfState::EGas(const Real den, const Real pre){
-    return pre * gm1Rec_; 
-}
-
 } // namespace Gaukuk

@@ -18,8 +18,8 @@ zmax            = 0.5
 
 # mesh 
 NX              = 512           # resolution on x   
-NY              = 16            # resolution on y    
-NZ              = 16            # resolution on z  
+NY              = 128           # resolution on y    
+NZ              = 128           # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
 
 # boundary 

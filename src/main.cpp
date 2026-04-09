@@ -35,6 +35,8 @@ int main(int argc, char* argv[]){
         step ++;  
         sim.WriteCons(step); 
         sim.WritePrim(step); 
+        std::cout<<"output "<< step << std::endl; 
         // WriteTarray(sim.flx1, "flx1", step); 
     }
+    std::cout<<"finished! "<< std::endl; 
 }
