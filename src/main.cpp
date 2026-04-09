@@ -6,8 +6,6 @@
 #include "gaukuk.hpp" 
 #include "sim.hpp" 
 
-#include "utils/debug.hpp"   // WriteTarray()
-
 int main(int argc, char* argv[]){
     using namespace Gaukuk; 
 
@@ -27,16 +25,25 @@ int main(int argc, char* argv[]){
 
     int step = 0; 
     Real tnow = sim.GetTime(); 
-    sim.WriteCons(step); 
+
+    DataType outputType = DataType::Cons; 
+    int oTypeFromConfig = static_cast<int>(Config::getInstance().get("dataType")); 
+    if (oTypeFromConfig == 0){
+        outputType = DataType::Cons; 
+    }else if (oTypeFromConfig == 1){
+        outputType = DataType::Prim; 
+    }
+
+    sim.WriteData(step, outputType); 
     while (tnow<tmax && (stepmax<0 || step<stepmax)){
         dtoutput = std::min(dtoutput, tmax-tnow); 
         sim.Advance(dtoutput); 
         tnow = sim.GetTime();
         step ++;  
-        sim.WriteCons(step); 
-        sim.WritePrim(step); 
+        sim.WriteData(step, outputType); 
         std::cout<<"output "<< step << std::endl; 
         // WriteTarray(sim.flx1, "flx1", step); 
     }
+    // sim.WriteData(step, outputType); 
     std::cout<<"finished! "<< std::endl; 
 }

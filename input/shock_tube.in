@@ -8,6 +8,9 @@ CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 1             # 1 : forward euler; 2 : rk2; 3: rk3
 dtoutput        = 0.01           # 
 
+# output
+dataType        = 1             # 0: output cons; 1: output prim
+
 # domain size 
 xmin            = -0.5 
 xmax            = 0.5
@@ -18,8 +21,8 @@ zmax            = 0.5
 
 # mesh 
 NX              = 512           # resolution on x   
-NY              = 128           # resolution on y    
-NZ              = 128           # resolution on z  
+NY              = 64           # resolution on y    
+NZ              = 64           # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
 
 # boundary 

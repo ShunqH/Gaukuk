@@ -6,23 +6,16 @@
 #include "../gaukuk.hpp" 
 #include "../sim.hpp"
 
-#include "../utils/debug.hpp"
-
 namespace Gaukuk
 {
 
 void Sim::ForwardEuler_(){
     boundary.UpdateBD(cons, grid); 
-    // CheckNaN(cons, "cons"); 
     cmax = 1e-16;
     eos.ConsToPrim(cons, prim, grid, cmax); 
-    // CheckNaN(prim, "prim"); 
     dt = CFL * domain.drmin / cmax; 
     dt = std::min(dt, dtUntilOutput); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3); 
-    // CheckNaN(flx1, "flx1"); 
-    // CheckNaN(flx2, "flx2"); 
-    // CheckNaN(flx3, "flx3"); 
     
     int il = grid.ib; 
     int ir = grid.ie; 

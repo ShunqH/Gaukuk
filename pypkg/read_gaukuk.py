@@ -6,6 +6,12 @@ class ReadGaukuk:
         self.dtype = dtype
 
         with open(filename, "rb") as f:
+            RealType = np.fromfile(f, dtype=np.int32, count=1)[0]
+            if RealType == 8:
+                dtype = np.float64
+            elif RealType == 4:
+                dtype = np.float32
+
             # frame information
             self.t = np.fromfile(f, dtype=dtype, count=1)[0]
 
@@ -19,7 +25,6 @@ class ReadGaukuk:
             self.leny = self.ny + 2 * self.nGhost
             self.lenz = self.nz + 2 * self.nGhost
             self.lenArr = self.lenz * self.leny * self.lenx 
-            self.lenCons = self.nvar * self.lenArr 
 
             # mesh
             self.xc = np.fromfile(f, dtype=dtype, count=self.nx)
@@ -27,13 +32,10 @@ class ReadGaukuk:
             self.zc = np.fromfile(f, dtype=dtype, count=self.nz)
 
             # data
-            if isCons:
-                self.cons = np.fromfile(f, dtype=dtype, count=self.lenCons)
-                self.cons = self.cons.reshape(
-                    (self.nvar, self.lenz, self.leny, self.lenx)
-                )
-            else:
-                self.prim = np.fromfile(f, dtype=dtype, count=self.lenCons)
-                self.prim = self.prim.reshape(
+            self.dataLen = np.fromfile(f, dtype=np.int32, count=1)[0] 
+            if (self.dataLen != self.nvar * self.lenArr ):
+                print("data size error, reshape might fail")
+            self.data = np.fromfile(f, dtype=dtype, count=self.dataLen)
+            self.data = self.data.reshape(
                     (self.nvar, self.lenz, self.leny, self.lenx)
                 )

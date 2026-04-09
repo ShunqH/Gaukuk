@@ -14,6 +14,11 @@
 
 namespace Gaukuk{
 
+enum class DataType {
+    Prim,
+    Cons
+};
+
 class Domain{
 public:
 friend class Sim; 
@@ -42,8 +47,7 @@ public:
     void Setup(); 
     void Advance(Real dtoutput);
     
-    void WriteCons(const int outputID); 
-    void WritePrim(const int outputID);
+    void WriteData(const int outputID, DataType dType); 
 
     Real GetTime(){ return t; };
     Real Getdt(){ return dt; };

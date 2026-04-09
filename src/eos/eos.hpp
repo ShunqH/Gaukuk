@@ -1,5 +1,9 @@
 #pragma once 
 
+// C++ headers
+#include <cmath>            // sqrt()
+
+// Gaukuk dependence
 #include "../gaukuk.hpp"
 #include "../template_array.hpp"
 #include "../grid/grid.hpp"
