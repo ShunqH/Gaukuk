@@ -7,6 +7,7 @@
 
 # CMake / Make
 obj/
+bin/*
 
 # Python
 __pycache__/
