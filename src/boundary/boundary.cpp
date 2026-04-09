@@ -1,3 +1,6 @@
+// C++ Headers
+#include <iostream>     // std::cout; std::endl; std::cerr
+
 // Gaukuk dependence
 #include "../gaukuk.hpp" 
 #include "../sim.hpp"
@@ -17,6 +20,8 @@ Boundary::Boundary(){
     // X left boundary registration
     if (typeBDXL == 0){
         Bdxl = &OutflowCopyXL;
+    }else if (typeBDXL == 1){
+        Bdxl = &PeriodicXL;
     }else{
         Bdxl = &OutflowCopyXL;
     }
@@ -24,6 +29,8 @@ Boundary::Boundary(){
     // X right boundary registration
     if (typeBDXR == 0){
         Bdxr = &OutflowCopyXR;
+    }else if (typeBDXR == 1){
+        Bdxr = &PeriodicXR;
     }else{
         Bdxr = &OutflowCopyXR;
     }
@@ -31,6 +38,8 @@ Boundary::Boundary(){
     // y left boundary registration
     if (typeBDYL == 0){
         Bdyl = &OutflowCopyYL;
+    }else if (typeBDYL == 1){
+        Bdyl = &PeriodicYL;
     }else{
         Bdyl = &OutflowCopyYL;
     }
@@ -38,6 +47,8 @@ Boundary::Boundary(){
     // y right boundary registration
     if (typeBDYR == 0){
         Bdyr = &OutflowCopyYR;
+    }else if (typeBDYR == 1){
+        Bdyr = &PeriodicYR;
     }else{
         Bdyr = &OutflowCopyYR;
     }
@@ -45,6 +56,8 @@ Boundary::Boundary(){
     // z left boundary registration
     if (typeBDZL == 0){
         Bdzl = &OutflowCopyYL;
+    }else if (typeBDZL == 1){
+        Bdzl = &PeriodicZL;
     }else{
         Bdzl = &OutflowCopyYL;
     }
@@ -52,6 +65,8 @@ Boundary::Boundary(){
     // z right boundary registration
     if (typeBDZR == 0){
         Bdzr = &OutflowCopyYR;
+    }else if (typeBDZR == 1){
+        Bdzr = &PeriodicZR;
     }else{
         Bdzr = &OutflowCopyYR;
     }

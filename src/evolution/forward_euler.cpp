@@ -1,6 +1,6 @@
 // C++ Header
 #include <algorithm>        //std::min 
-#include <iostream>     // std::cout; std::endl; std::cerr
+// #include <iostream>     // std::cout; std::endl; std::cerr
 
 // Gaukuk dependence
 #include "../gaukuk.hpp" 
@@ -10,6 +10,7 @@ namespace Gaukuk
 {
 
 void Sim::ForwardEuler_(){
+    // std::cout<<"check1"<<std::endl; 
     boundary.UpdateBD(cons, grid); 
     cmax = 1e-16;
     eos.ConsToPrim(cons, prim, grid, cmax); 

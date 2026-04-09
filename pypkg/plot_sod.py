@@ -16,9 +16,10 @@ frame = ReadGaukuk(filename)
 dx = frame.xc[1] - frame.xc[0]
 xlist = np.linspace(frame.xc[0]-dx, frame.xc[-1]+dx, frame.lenx)
 
-ID = DEN 
 k = int(frame.nz/2)
 j = int(frame.ny/2)
+# k = 3
+# j = 3
 
 fig = plt.figure(figsize=(12,8))
 plt.subplots_adjust(hspace=0.02, wspace=0.2)

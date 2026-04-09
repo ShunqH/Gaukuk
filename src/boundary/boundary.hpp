@@ -31,6 +31,14 @@ friend class Sim;
     static void OutflowCopyZL(TArray<Real>& cons, const Grid& grid); 
     static void OutflowCopyZR(TArray<Real>& cons, const Grid& grid); 
 
+    // periodic boundary condition
+    static void PeriodicXL(TArray<Real>& cons, const Grid& grid); 
+    static void PeriodicXR(TArray<Real>& cons, const Grid& grid); 
+    static void PeriodicYL(TArray<Real>& cons, const Grid& grid); 
+    static void PeriodicYR(TArray<Real>& cons, const Grid& grid); 
+    static void PeriodicZL(TArray<Real>& cons, const Grid& grid); 
+    static void PeriodicZR(TArray<Real>& cons, const Grid& grid); 
+
     static void SelfDefineCopyXL(TArray<Real>& cons, const Grid& grid); 
     static void SelfDefineCopyXR(TArray<Real>& cons, const Grid& grid); 
 };
