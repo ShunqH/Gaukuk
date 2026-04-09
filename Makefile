@@ -20,6 +20,7 @@ USE_OPENMP = 1
 
 CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall \
 #            -Rpass=loop-vectorize
+# CXXFLAGS = -O0 -march=native -ffast-math -funroll-loops -std=c++14 -Wall 
 INCLUDES = -Isrc
 LDFLAGS =
 

@@ -43,6 +43,7 @@ public:
     void Advance(Real dtoutput);
     
     void WriteCons(const int outputID); 
+    void WritePrim(const int outputID);
 
     Real GetTime(){ return t; };
     Real Getdt(){ return dt; };

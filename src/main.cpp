@@ -6,6 +6,8 @@
 #include "gaukuk.hpp" 
 #include "sim.hpp" 
 
+#include "utils/debug.hpp"   // WriteTarray()
+
 int main(int argc, char* argv[]){
     using namespace Gaukuk; 
 
@@ -32,6 +34,7 @@ int main(int argc, char* argv[]){
         tnow = sim.GetTime();
         step ++;  
         sim.WriteCons(step); 
-        // std::cout<<"dt = "<< sim.Getdt() << std::endl; 
+        sim.WritePrim(step); 
+        // WriteTarray(sim.flx1, "flx1", step); 
     }
 }

@@ -1,7 +1,7 @@
 import numpy as np
 
 class ReadGaukuk:
-    def __init__(self, filename, dtype=np.float64):
+    def __init__(self, filename, isCons = True, dtype=np.float64):
         self.filename = filename
         self.dtype = dtype
 
@@ -27,8 +27,13 @@ class ReadGaukuk:
             self.zc = np.fromfile(f, dtype=dtype, count=self.nz)
 
             # data
-            self.cons = np.fromfile(f, dtype=dtype, count=self.lenCons)
-
-            self.cons = self.cons.reshape(
-                (self.nvar, self.lenz, self.leny, self.lenx)
-            )
+            if isCons:
+                self.cons = np.fromfile(f, dtype=dtype, count=self.lenCons)
+                self.cons = self.cons.reshape(
+                    (self.nvar, self.lenz, self.leny, self.lenx)
+                )
+            else:
+                self.prim = np.fromfile(f, dtype=dtype, count=self.lenCons)
+                self.prim = self.prim.reshape(
+                    (self.nvar, self.lenz, self.leny, self.lenx)
+                )

@@ -1,6 +1,7 @@
 // C++ headers 
 #include <cmath>            // sqrt
 #include <algorithm>        // max 
+#include <iostream>     // std::cout; std::endl; std::cerr
 
 // Gaukuk dependence
 #include "../gaukuk.hpp"    // Real
@@ -60,6 +61,10 @@ void Flux::RiemannSolver(const TArray<Real>& ul, const TArray<Real>& ur, const i
         Real sr = vxr + ar*qr; 
         Real ss = ( prer - prel + denl*vxl*(sl-vxl) - denr*vxr*(sr-vxr) ) / 
                   ( denl*(sl-vxl) - denr*(sr-vxr) ) ;
+        // Real testTerm = denl*(sl-vxl) - denr*(sr-vxr); 
+        // if (std::abs(testTerm)<1e-5){
+        //     std::cout<<testTerm<<std::endl;
+        // } 
         
         // Step III HLLC flux
         Real el = eos.EGas(denl, prel) + 0.5*denl*(vxl*vxl+vyl*vyl+vzl*vzl); 

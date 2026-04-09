@@ -14,9 +14,9 @@ namespace Gaukuk{
 class Flux{
 friend class Sim; 
 public:
-    Flux(const int lenx){
-        ul_.NewArray(NVar, lenx+1);
-        ur_.NewArray(NVar, lenx+1);  
+    Flux(const int lenx): lenUlUr(lenx+1){
+        // ul_.NewArray(NVar, lenx+1);
+        // ur_.NewArray(NVar, lenx+1);  
     }
     void CalFlux(const Grid& grid, const TArray<Real>& prim, EquationOfState& eos,
                  TArray<Real>& flx1, TArray<Real>& flx2, TArray<Real>& flx3); 
@@ -25,7 +25,8 @@ public:
                        int k, int j, int igb, int ige); 
 private:
     Reconstruction recon; 
-    TArray<Real> ul_, ur_;
+    const int lenUlUr; 
+    // TArray<Real> ul_, ur_;
 };
     
 } // namespace Gaukuk

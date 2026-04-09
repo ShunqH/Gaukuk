@@ -50,19 +50,19 @@ Sim::Sim(): domain(grid), flux(grid.lenx),
 }
 
 void Sim::Advance(Real dtoutput){
-    // Real tNext = t + dtoutput; 
-    // dtUntilOutput = dtoutput; 
-    // while (t<tNext){
-    //     (this->*integrator_)(); 
-    //     t += dt; 
-    //     dtUntilOutput = tNext - t; 
-    //     std::cout<<"dt = "<< dt << std::endl; 
-    //     // std::cout<<"cmax = "<< cmax << std::endl; 
-    // }
-    (this->*integrator_)(); 
-    t += dt; 
-    std::cout<<"dt = "<< dt << std::endl; 
-    std::cout<<"cmax = "<< cmax << std::endl; 
+    Real tNext = t + dtoutput; 
+    dtUntilOutput = dtoutput; 
+    while (t<tNext){
+        (this->*integrator_)(); 
+        t += dt; 
+        dtUntilOutput = tNext - t; 
+        std::cout<<"dt = "<< dt << std::endl; 
+        // std::cout<<"cmax = "<< cmax << std::endl; 
+    }
+    // (this->*integrator_)(); 
+    // t += dt; 
+    // std::cout<<"dt = "<< dt << std::endl; 
+    // std::cout<<"cmax = "<< cmax << std::endl; 
 }
 
 } // namespace Gaukuk

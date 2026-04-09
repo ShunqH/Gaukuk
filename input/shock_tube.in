@@ -2,8 +2,8 @@
 gamma           = 1.4           # for adiabatic eos 
 
 # simulation 
-tmax            = 0.1           # total time 
-stepmax         = 10            # unlimitted
+tmax            = 0.2           # total time 
+stepmax         = -1            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 1             # 1 : forward euler; 2 : rk2; 3: rk3
 dtoutput        = 0.01           # 
@@ -17,7 +17,7 @@ zmin            = -0.5
 zmax            = 0.5 
 
 # mesh 
-NX              = 128           # resolution on x   
+NX              = 512           # resolution on x   
 NY              = 16            # resolution on y    
 NZ              = 16            # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
