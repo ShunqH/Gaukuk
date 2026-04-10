@@ -12,6 +12,7 @@ bin/*
 # Python
 __pycache__/
 *.pyc
+*.ipynb
 
 # data
 *.hdf5

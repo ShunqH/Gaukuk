@@ -45,18 +45,18 @@ void Sim::Setup(){
                 Real rhoNow = (std::abs(yNow)<yLayer) ? rhoIn : rhoOut ; 
                 Real vx = (std::abs(yNow)<yLayer) ? vxIn : vxOut ; 
 
-                Real vxRamdon = amp * std::sin( 4 * PI * (xNow-xmin) / Lx )
+                Real vxRandom = amp * std::sin( 4 * PI * (xNow-xmin) / Lx )
                                     * std::sin( 2 * PI * (yNow-ymin) / Ly ) ; 
-                Real vyRamdon = amp * std::sin( 4 * PI * (xNow-xmin) / Lx + 0.87*PI)
+                Real vyRandom = amp * std::sin( 4 * PI * (xNow-xmin) / Lx + 0.87*PI)
                                     * std::sin( 2 * PI * (yNow-ymin) / Ly + 1.23*PI) ; 
 
                 // usually you have to setup conservative quantivities (cons) 
                 // but you can setup primitive quantivities (cons) 
                 // then use eos.PrimToCons to conver 
                 prim(DEN, k, j, i) = rhoNow; 
-                prim(VLX, k, j, i) = vx + vxRamdon; 
-                prim(VLY, k, j, i) = vyRamdon; 
-                prim(VLY, k, j, i) = 0; 
+                prim(VLX, k, j, i) = vx + vxRandom; 
+                prim(VLY, k, j, i) = vyRandom; 
+                prim(VLZ, k, j, i) = 0; 
                 prim(PRE, k, j, i) = pressure; 
             }
         }

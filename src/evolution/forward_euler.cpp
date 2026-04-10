@@ -25,9 +25,9 @@ void Sim::ForwardEuler_(){
     int kl = grid.kb;
     int kr = grid.ke; 
 
-    Real dtdx = dt/domain.dx; 
-    Real dtdy = dt/domain.dy; 
-    Real dtdz = dt/domain.dz; 
+    Real dtdx = dt*domain.dxRec; 
+    Real dtdy = dt*domain.dyRec; 
+    Real dtdz = dt*domain.dzRec; 
 #pragma omp parallel for collapse(3) schedule(static)    
     for (int ivar=DEN; ivar<=ENG; ivar++){
         for (int k=kl; k<kr; k++){

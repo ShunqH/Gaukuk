@@ -10,11 +10,11 @@ MTZ = 3
 ENG = 4 
 gamma = 1.4 
 gm1Rec = 1.0 / (gamma - 1)
-totalFrames = 51
+totalFrames = 1001
 
 tlist = np.zeros(totalFrames) 
 englist = np.zeros(totalFrames)
-tag = "kh"
+tag = "wave"
 
 for frameID in range(0, totalFrames):
     filename = "../bin/cons_" + str(frameID).zfill(5)
@@ -37,12 +37,12 @@ for frameID in range(0, totalFrames):
     x = frame.xc
     y = frame.yc
     rhoMin = 1
-    rhoMax = 2
+    rhoMax = 1.1
 
     # print(il,ir,jl,jr)
     X, Y = np.meshgrid(x, y)
 
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 4))
     plt.pcolormesh(X, Y, rho, cmap='viridis', shading='auto',
                    vmin=rhoMin, vmax=rhoMax)
     plt.colorbar(label='Density')
@@ -55,7 +55,6 @@ for frameID in range(0, totalFrames):
     plt.close()
     print("frame = ", frameID, end="\r")
     del frame
-
 np.save("t_" + tag + ".npy", tlist)
 np.save("eng_" + tag + ".npy", englist)
 
@@ -75,5 +74,5 @@ plt.savefig(tag + "_energy_conservation.png", bbox_inches='tight', dpi=600)
 # plt.show()
 plt.close()
 
-os.system("ffmpeg -y -framerate 10 -i " + tag + "_%05d.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 " + tag + ".mp4")
+os.system("ffmpeg -y -framerate 30 -i " + tag + "_%05d.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 " + tag + ".mp4")
 

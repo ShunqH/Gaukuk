@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
     sim.Setup(); 
     // sim.boundary.UpdateBD(sim.cons, sim.grid);
 
-    int step = 0; 
+    int outputStep = 0; 
     Real tnow = sim.GetTime(); 
 
     DataType outputType = DataType::Cons; 
@@ -34,16 +34,16 @@ int main(int argc, char* argv[]){
         outputType = DataType::Prim; 
     }
 
-    sim.WriteData(step, outputType); 
-    while (tnow<tmax && (stepmax<0 || step<stepmax)){
+    sim.WriteData(outputStep, outputType); 
+    while (tnow<tmax && (stepmax<0 || outputStep<stepmax)){
         dtoutput = std::min(dtoutput, tmax-tnow); 
         sim.Advance(dtoutput); 
         tnow = sim.GetTime();
-        step ++;  
-        sim.WriteData(step, outputType); 
-        std::cout<<"output "<< step << std::endl; 
-        // WriteTarray(sim.flx1, "flx1", step); 
+        outputStep ++;  
+        sim.WriteData(outputStep, outputType); 
+        std::cout<<"output "<< outputStep << std::endl; 
+        // WriteTarray(sim.flx1, "flx1", outputStep); 
     }
-    // sim.WriteData(step, outputType); 
+    // sim.WriteData(outputStep, outputType); 
     std::cout<<"finished! "<< std::endl; 
 }

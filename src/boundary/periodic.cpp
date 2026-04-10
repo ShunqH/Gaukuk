@@ -142,9 +142,9 @@ void Boundary::PeriodicZL(TArray<Real>& cons, const Grid& grid){
     int kDist = grid.nz;                    // distance between the activated and ghost cell 
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        // loop z activated zone  
+        // loop z ghost zone  
         for (int k=kl; k<kr; k++){
-            // loop y ghost zone 
+            // loop y activated zone 
             for (int j=jl; j<jr; j++){
 #pragma omp simd
                 // loop x activated zone
@@ -171,9 +171,9 @@ void Boundary::PeriodicZR(TArray<Real>& cons, const Grid& grid){
     int kDist = grid.nz;                    // distance between the activated and ghost cell 
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        // loop z activated zone  
+        // loop z ghost zone  
         for (int k=kl; k<kr; k++){
-            // loop y ghost zone 
+            // loop y activated zone 
             for (int j=jl; j<jr; j++){
 #pragma omp simd
                 // loop x activated zone

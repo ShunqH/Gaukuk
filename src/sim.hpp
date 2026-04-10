@@ -6,8 +6,8 @@
 // Gaukuk dependence
 #include "gaukuk.hpp" 
 #include "template_array.hpp"
-#include "grid/grid.hpp"
-#include "grid/reconstruction.hpp" 
+#include "grid.hpp"
+#include "reconstruction/reconstruction.hpp"
 #include "eos/eos.hpp"
 #include "flux/flux.hpp"
 #include "boundary/boundary.hpp" 
@@ -27,6 +27,7 @@ friend class Sim;
 private:
     Real xmin, xmax, ymin, ymax, zmin, zmax; 
     Real dx, dy, dz, drmin; 
+    Real dxRec, dyRec, dzRec; 
     TArray<Real> xc, yc, zc;       // cell center 
 };
 
@@ -53,11 +54,13 @@ public:
     Real Getdt(){ return dt; };
 private:
 using IntegratorFunc = void (Sim::*)();
+    int step; 
     Real t, dt, dtUntilOutput, cmax, CFL; 
     IntegratorFunc integrator_; 
     void ForwardEuler_(); 
-    // void RK2(); 
-    TArray<Real> consTemp1_, consTemp2_; 
+    void RK2_(); 
+    void RK3_(); 
+    TArray<Real> consTemp_, consTemp2_; 
 }; 
 
 } // namespace Gaukuk

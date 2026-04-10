@@ -1,3 +1,10 @@
+-include config.mk
+
+SETUP ?= kh
+EOS ?= adiabatic
+FLUX ?= hllc
+USE_OPENMP ?= 0
+
 # define
 UNAME_S := $(shell uname -s)
 
@@ -16,7 +23,6 @@ else
     OPENMP_INC  =
     OPENMP_LIBPATH =
 endif 
-USE_OPENMP = 1
 
 CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall \
 #            -Rpass=loop-vectorize										 \
@@ -40,19 +46,22 @@ TARGET = $(BIN_DIR)/gaukuk.sim
 # obtain source files (.cpp files)
 SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/sim.cpp \
-	   $(MAIN_DIR)/eos/adiabatic.cpp \
+	   $(MAIN_DIR)/eos/$(EOS).cpp \
 	   $(MAIN_DIR)/flux/cal_flux.cpp \
-	   $(MAIN_DIR)/flux/hllc.cpp \
+	   $(MAIN_DIR)/flux/$(FLUX).cpp \
 	   $(MAIN_DIR)/evolution/forward_euler.cpp \
+	   $(MAIN_DIR)/evolution/rk2.cpp \
+	   $(MAIN_DIR)/evolution/rk3.cpp \
 	   $(MAIN_DIR)/boundary/boundary.cpp \
 	   $(MAIN_DIR)/boundary/outflow_copy.cpp \
 	   $(MAIN_DIR)/boundary/periodic.cpp \
-	   $(MAIN_DIR)/grid/reconstruction.cpp \
-	   $(MAIN_DIR)/setup/setup_kh.cpp \
+	   $(MAIN_DIR)/boundary/reflective.cpp \
+	   $(MAIN_DIR)/reconstruction/reconstruction.cpp \
+	   $(MAIN_DIR)/setup/setup_$(SETUP).cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
 
-
+# $(MAIN_DIR)/setup/setup_kh.cpp \
 # 	   $(MAIN_DIR)/grid/
 
 # create object files (.o 文件)
@@ -69,7 +78,7 @@ $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.cpp | $(OBJ_DIR)
 # chain rule
 $(TARGET): $(OBJS) | $(BIN_DIR)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(OBJS) $(LDFLAGS) $(OPENMP_FLAG) -o $(TARGET)
+	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 # clean 
 clean:

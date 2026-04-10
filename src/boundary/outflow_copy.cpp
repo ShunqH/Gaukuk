@@ -135,9 +135,9 @@ void Boundary::OutflowCopyZL(TArray<Real>& cons, const Grid& grid){
     int kAct = kr;                          // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        // loop z activated zone  
+        // loop z ghost zone  
         for (int k=kl; k<kr; k++){
-            // loop y ghost zone 
+            // loop y activated zone 
             for (int j=jl; j<jr; j++){
 #pragma omp simd
                 // loop x activated zone
@@ -163,9 +163,9 @@ void Boundary::OutflowCopyZR(TArray<Real>& cons, const Grid& grid){
     int kAct = kl - 1;                      // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        // loop z activated zone  
+        // loop z ghost zone  
         for (int k=kl; k<kr; k++){
-            // loop y ghost zone 
+            // loop y activated zone 
             for (int j=jl; j<jr; j++){
 #pragma omp simd
                 // loop x activated zone

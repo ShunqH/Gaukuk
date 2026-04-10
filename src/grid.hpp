@@ -4,7 +4,7 @@
 #include <stdexcept>    // runtime_error
 
 // Gaukuk dependence
-#include "../utils/utils.hpp"   // Config
+#include "utils/utils.hpp"   // Config
 
 namespace Gaukuk{
 
@@ -14,7 +14,6 @@ friend class Sim;
     int nx, ny, nz, nGhost, lenx, leny, lenz, lenArr; 
     int igb, ige, jgb, jge, kgb, kge;   // begin and end ids including ghost cells 
     int ib, ie, jb, je, kb, ke;         // activate cell begin and end ids 
-    int iib, iie, jjb, jje, kkb, kke;   // flux (half) cell begin and end ids
 
     Grid() {
         nx = Config::getInstance().get("NX"); 
@@ -39,11 +38,6 @@ friend class Sim;
         je = jb + ny; 
         kb = kgb + nGhost; 
         ke = kb + nz; 
-
-        iib = jjb = kkb = 0; 
-        iie = lenx-1; 
-        jje = leny-1; 
-        kke = lenz-1;  
     }
 };
 

@@ -6,7 +6,7 @@
 // Gaukuk dependence
 #include "../gaukuk.hpp"
 #include "../template_array.hpp"
-#include "../grid/grid.hpp"
+#include "../grid.hpp"
 
 namespace Gaukuk{
 

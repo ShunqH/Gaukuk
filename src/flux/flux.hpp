@@ -5,8 +5,8 @@
 // Gaukuk dependence
 #include "../gaukuk.hpp"            //Real 
 #include "../template_array.hpp"    // TArray
-#include "../grid/grid.hpp"         // class grid
-#include "../grid/reconstruction.hpp"        // class slice; void ExtractXForCalFlux 
+#include "../grid.hpp"         // class grid
+#include "../reconstruction/reconstruction.hpp"        // class slice; void ExtractXForCalFlux 
 #include "../eos/eos.hpp"   // EquationOfState
 
 namespace Gaukuk{

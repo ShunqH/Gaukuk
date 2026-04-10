@@ -2,14 +2,14 @@
 gamma           = 1.4           # for adiabatic eos 
 
 # simulation 
-tmax            = 2           # total time 
+tmax            = 5             # total time 
 stepmax         = -1            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
-integrator      = 1             # 1 : forward euler; 2 : rk2; 3: rk3
+integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
 dtoutput        = 0.1           # 
 
 # output
-dataType        = 1             # 0: output cons; 1: output prim
+dataType        = 0             # 0: output cons; 1: output prim
 
 # domain size 
 xmin            = -0.5 
@@ -22,16 +22,17 @@ zmax            = 0.5
 # mesh 
 NX              = 256           # resolution on x   
 NY              = 256           # resolution on y    
-NZ              = 8           # resolution on z  
+NZ              = 1             # resolution on z  
 NGhost          = 1             # number of ghost cell ( usually is 1 )
 
 # boundary 
-xleft           = 0             # 0 for copy, 1 for periodic 
-xright          = 0             # 0 for copy, 1 for periodic 
-yleft           = 1             # 0 for copy, 1 for periodic 
-yright          = 1             # 0 for copy, 1 for periodic 
-zleft           = 1             # 0 for copy, 1 for periodic 
-zright          = 1             # 0 for copy, 1 for periodic 
+# 0 for copy, 1 for periodic, 2 for reflective
+xleft           = 1              
+xright          = 1             
+yleft           = 1             
+yright          = 1             
+zleft           = 1             
+zright          = 1             
 
 # problem setup
 rhoIn           = 2.0           # 
