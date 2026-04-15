@@ -50,12 +50,14 @@ public:
     
     void WriteData(const int outputID, DataType dType); 
 
-    Real GetTime(){ return t; };
-    Real Getdt(){ return dt; };
+    Real GetTime(){ return t; }
+    Real Getdt(){ return dt; }
+    int GetStep() { return step; }
 private:
 using IntegratorFunc = void (Sim::*)();
     int step; 
     Real t, dt, dtUntilOutput, cmax, CFL; 
+    int rcOrder, integratorType; 
     IntegratorFunc integrator_; 
     void ForwardEuler_(); 
     void RK2_(); 

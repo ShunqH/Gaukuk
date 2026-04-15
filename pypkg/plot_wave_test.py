@@ -14,14 +14,17 @@ totalFrames = 1001
 
 tlist = np.zeros(totalFrames) 
 englist = np.zeros(totalFrames)
+sPath = "./wave_test_256_128_2order/"
 tag = "wave"
 
 for frameID in range(0, totalFrames):
     filename = "../bin/cons_" + str(frameID).zfill(5)
-    savename = tag + "_" + str(frameID).zfill(5) + ".png"
+    savename = sPath + tag + "_" + str(frameID).zfill(5) + ".png"
     frame = ReadGaukuk(filename)
 
-    k = int((frame.nz+1)/2)
+    k = int((frame.lenz)/2)
+    kl = frame.nGhost
+    kr = frame.nGhost + frame.nz 
     jl = frame.nGhost
     jr = frame.nGhost + frame.ny 
     il = frame.nGhost
@@ -31,8 +34,9 @@ for frameID in range(0, totalFrames):
     mty = frame.data[MTY,k,jl:jr,il:ir]
     mtz = frame.data[MTZ,k,jl:jr,il:ir]
     eng = frame.data[ENG,k,jl:jr,il:ir]
+    eng2 = frame.data[ENG,kl:kr,jl:jr,il:ir]
     tlist[frameID] = frame.t 
-    englist[frameID] = np.sum(eng)
+    englist[frameID] = np.sum(eng2)
 
     x = frame.xc
     y = frame.yc
@@ -43,7 +47,7 @@ for frameID in range(0, totalFrames):
     X, Y = np.meshgrid(x, y)
 
     plt.figure(figsize=(8, 4))
-    plt.pcolormesh(X, Y, rho, cmap='viridis', shading='auto',
+    plt.pcolormesh(X, Y, rho, cmap='viridis', shading='gouraud',
                    vmin=rhoMin, vmax=rhoMax)
     plt.colorbar(label='Density')
     plt.xlabel('x')
@@ -55,8 +59,8 @@ for frameID in range(0, totalFrames):
     plt.close()
     print("frame = ", frameID, end="\r")
     del frame
-np.save("t_" + tag + ".npy", tlist)
-np.save("eng_" + tag + ".npy", englist)
+np.save(sPath + "t_" + tag + ".npy", tlist)
+np.save(sPath + "eng_" + tag + ".npy", englist)
 
 plt.figure(figsize=(8, 6))
 plt.plot(tlist, englist/englist[0])
@@ -70,9 +74,9 @@ plt.xlabel('t', fontsize = 15)
 plt.ylabel(r'$E/E0$', fontsize = 15)
 plt.grid()
 plt.title('Energy Conservation', fontsize = 15) 
-plt.savefig(tag + "_energy_conservation.png", bbox_inches='tight', dpi=600)
+plt.savefig(sPath + tag + "_energy_conservation.png", bbox_inches='tight', dpi=600)
 # plt.show()
 plt.close()
 
-os.system("ffmpeg -y -framerate 30 -i " + tag + "_%05d.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 " + tag + ".mp4")
+os.system("ffmpeg -y -framerate 60 -i " + sPath + tag + "_%05d.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 " + sPath + tag + ".mp4")
 

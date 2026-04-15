@@ -2,11 +2,12 @@
 gamma           = 1.4
 
 # simulation 
-tmax            = 10.0           # 
-stepmax         = -1
-CFL             = 0.5
-integrator      = 2             # RK2
-dtoutput        = 0.01
+tmax            = 10.0          # 
+dtoutput        = 0.01          # 
+stepmax         = -1            # unlimitted
+CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
+integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
+RcOrder         = 2             # order of spatial reconstruction
 
 # output
 dataType        = 0             # 0: output cons; 1: output prim
@@ -20,11 +21,11 @@ zmin            = -0.5
 zmax            =  0.5
 
 # mesh 
-NX              = 512           # resolution on x   
-NY              = 64            # resolution on y 
+NX              = 256           # resolution on x   
+NY              = 128           # resolution on y 
 NZ              = 1             # resolution on z 
 
-NGhost          = 1             # number of ghost cell ( usually is 1 )
+NGhost          = 2             # number of ghost cell ( usually is 1 )
 
 # boundary 
 # 0: copy, 1: periodic, 2: reflective

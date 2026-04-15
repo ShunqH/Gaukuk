@@ -1,6 +1,9 @@
 // CPP header
 #include <algorithm> 
 #include <iostream>     // std::cout; std::endl; std::cerr
+#include <chrono>       // std::chrono::high_resolution_clock
+#include <ctime>        // clock_t
+#include <iomanip>      // std::setw()
 
 // Gaukuk dependence
 #include "gaukuk.hpp" 
@@ -35,6 +38,10 @@ int main(int argc, char* argv[]){
     }
 
     sim.WriteData(outputStep, outputType); 
+    // std::cout<<sim.cons(0, sim.grid.kb, 10, 10)<<std::endl;
+     
+    auto time0 = std::chrono::high_resolution_clock::now();
+    clock_t cputime0 = clock();
     while (tnow<tmax && (stepmax<0 || outputStep<stepmax)){
         dtoutput = std::min(dtoutput, tmax-tnow); 
         sim.Advance(dtoutput); 
@@ -44,6 +51,16 @@ int main(int argc, char* argv[]){
         std::cout<<"output "<< outputStep << std::endl; 
         // WriteTarray(sim.flx1, "flx1", outputStep); 
     }
+    auto time1 = std::chrono::high_resolution_clock::now();
+    clock_t cputime1 = clock();
     // sim.WriteData(outputStep, outputType); 
-    std::cout<<"finished! "<< std::endl; 
+    Real walltime = std::chrono::duration<Real>(time1 - time0).count(); 
+    Real cputime = double(cputime1 - cputime0) / CLOCKS_PER_SEC; 
+    std::cout << std::right
+            << "Finish! " 
+            << "\n    total steps = " << std::setw(6) << sim.GetStep()
+            << " , \n    walltime = " << std::setw(8) << std::fixed << std::setprecision(3) << walltime
+            << " s, \n    cputime = " << std::setw(8) << std::fixed << std::setprecision(3) << cputime << " s"
+            << "\n-----------------------------------------------------------"
+            << std::endl;
 }

@@ -5,7 +5,7 @@
 
 namespace Gaukuk{
 
-void Reconstruction::ReconstructXForFlux(const TArray<Real>& prim, 
+void Reconstruction::ReconstructXFirstOrder(const TArray<Real>& prim, 
                             TArray<Real>& ul, TArray<Real>& ur, 
                             int k, int j, int igb, int ige){
     for (int n=0; n<NVar; n++){
@@ -18,7 +18,7 @@ void Reconstruction::ReconstructXForFlux(const TArray<Real>& prim,
     }
 }
 
-void Reconstruction::ReconstructYZForFlux(const TArray<Real>& prim, TArray<Real>& ur, 
+void Reconstruction::ReconstructYZFirstOrder(const TArray<Real>& prim, TArray<Real>& ur, 
                             int k, int j, int igb, int ige){
     for (int n=0; n<NVar; n++){
 #pragma omp simd 

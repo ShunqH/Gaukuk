@@ -56,7 +56,8 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/boundary/outflow_copy.cpp \
 	   $(MAIN_DIR)/boundary/periodic.cpp \
 	   $(MAIN_DIR)/boundary/reflective.cpp \
-	   $(MAIN_DIR)/reconstruction/reconstruction.cpp \
+	   $(MAIN_DIR)/reconstruction/recon_first_order.cpp \
+	   $(MAIN_DIR)/reconstruction/recon_piecewise_linear.cpp \
 	   $(MAIN_DIR)/setup/setup_$(SETUP).cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 

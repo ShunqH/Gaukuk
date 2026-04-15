@@ -46,11 +46,13 @@ Sim::Sim(): domain(grid), flux(grid.lenx),
     flx1.NewArray(NVar, grid.lenz, grid.leny, grid.lenx+1); 
     flx2.NewArray(NVar, grid.lenz, grid.leny+1, grid.lenx); 
     flx3.NewArray(NVar, grid.lenz+1, grid.leny, grid.lenx); 
-
-
-    if (static_cast<int>(Config::getInstance().get("integrator")) == 1) {
+    
+    integratorType = static_cast<int>(Config::getInstance().get("integrator", 2)); 
+    rcOrder = static_cast<int>(Config::getInstance().get("RcOrder", 1)); 
+    
+    if (integratorType == 1) {
         integrator_ = &Sim::ForwardEuler_; 
-    }else if (static_cast<int>(Config::getInstance().get("integrator")) == 3) {
+    }else if (integratorType == 3) {
         consTemp_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
         integrator_ = &Sim::RK3_; 
     }else {

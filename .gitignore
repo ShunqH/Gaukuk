@@ -13,6 +13,7 @@ bin/*
 __pycache__/
 *.pyc
 *.ipynb
+*npy
 
 # data
 *.hdf5

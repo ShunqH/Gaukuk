@@ -16,7 +16,7 @@ void Sim::ForwardEuler_(){
     eos.ConsToPrim(cons, prim, grid, cmax); 
     dt = CFL * domain.drmin / cmax; 
     dt = std::min(dt, dtUntilOutput); 
-    flux.CalFlux(grid, prim, eos, flx1, flx2, flx3); 
+    flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
     
     int il = grid.ib; 
     int ir = grid.ie; 
@@ -28,11 +28,32 @@ void Sim::ForwardEuler_(){
     Real dtdx = dt*domain.dxRec; 
     Real dtdy = dt*domain.dyRec; 
     Real dtdz = dt*domain.dzRec; 
-#pragma omp parallel for collapse(3) schedule(static)    
+if (grid.nz == 1){ 
+    #pragma omp parallel for collapse(3) schedule(static)    
     for (int ivar=DEN; ivar<=ENG; ivar++){
         for (int k=kl; k<kr; k++){
             for (int j=jl; j<jr; j++){
-#pragma omp simd
+    #pragma omp simd
+                for (int i=il; i<ir; i++){
+                    Real& u = cons(ivar, k, j, i); 
+
+                    const Real fl = flx1(ivar, k, j, i); 
+                    const Real fr = flx1(ivar, k, j, i+1); 
+                    const Real gl = flx2(ivar, k, j, i); 
+                    const Real gr = flx2(ivar, k, j+1, i); 
+
+                    u = u - dtdx * ( fr - fl ) 
+                          - dtdy * ( gr - gl ) ; 
+                }
+            }
+        }
+    }  
+}else{
+    #pragma omp parallel for collapse(3) schedule(static)    
+    for (int ivar=DEN; ivar<=ENG; ivar++){
+        for (int k=kl; k<kr; k++){
+            for (int j=jl; j<jr; j++){
+    #pragma omp simd
                 for (int i=il; i<ir; i++){
                     Real& u = cons(ivar, k, j, i); 
 
@@ -50,6 +71,7 @@ void Sim::ForwardEuler_(){
             }
         }
     }
+}
 }
 
 } // namespace Gaukuk

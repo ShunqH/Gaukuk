@@ -2,11 +2,12 @@
 gamma           = 1.4           # for adiabatic eos 
 
 # simulation 
-tmax            = 5             # total time 
+tmax            = 50            # total time 
+dtoutput        = 0.1           # 
 stepmax         = -1            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
-dtoutput        = 0.1           # 
+RcOrder         = 2             # order of spatial reconstruction
 
 # output
 dataType        = 0             # 0: output cons; 1: output prim
@@ -22,8 +23,8 @@ zmax            = 0.5
 # mesh 
 NX              = 256           # resolution on x   
 NY              = 256           # resolution on y    
-NZ              = 1             # resolution on z  
-NGhost          = 1             # number of ghost cell ( usually is 1 )
+NZ              = 2             # resolution on z  
+NGhost          = 2             # number of ghost cell 
 
 # boundary 
 # 0 for copy, 1 for periodic, 2 for reflective
@@ -36,9 +37,9 @@ zright          = 1
 
 # problem setup
 rhoIn           = 2.0           # 
-vxIn            = 0.5           # 
+vxIn            = -0.5           # 
 rhoOut          = 1.0           #       
-vxOut           = -0.5          # 
+vxOut           = 0.5          # 
 pressure        = 2.5           # 
 
-amp             = 0.1          # 
+amp             = 0.05          # 

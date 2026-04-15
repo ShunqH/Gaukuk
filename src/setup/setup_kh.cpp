@@ -45,10 +45,8 @@ void Sim::Setup(){
                 Real rhoNow = (std::abs(yNow)<yLayer) ? rhoIn : rhoOut ; 
                 Real vx = (std::abs(yNow)<yLayer) ? vxIn : vxOut ; 
 
-                Real vxRandom = amp * std::sin( 4 * PI * (xNow-xmin) / Lx )
-                                    * std::sin( 2 * PI * (yNow-ymin) / Ly ) ; 
-                Real vyRandom = amp * std::sin( 4 * PI * (xNow-xmin) / Lx + 0.87*PI)
-                                    * std::sin( 2 * PI * (yNow-ymin) / Ly + 1.23*PI) ; 
+                Real vxRandom = amp * std::sin( 4 * PI * (xNow-xmin) / Lx ); 
+                Real vyRandom = amp * std::cos( 4 * PI * (xNow-xmin) / Lx );  
 
                 // usually you have to setup conservative quantivities (cons) 
                 // but you can setup primitive quantivities (cons) 

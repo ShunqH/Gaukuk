@@ -89,8 +89,10 @@ void Boundary::UpdateBD(TArray<Real>& cons, const Grid& grid){
     Bdxr(cons, grid); 
     Bdyl(cons, grid); 
     Bdyr(cons, grid); 
+if (grid.nz>1){
     Bdzl(cons, grid); 
     Bdzr(cons, grid); 
+}
 }
 
 } // namespace Gaukuk
