@@ -22,6 +22,10 @@ __pycache__/
 *.bin
 output_*
 ./bin/*
+.pypkg/*/*
+*_0*
+*cons*
+*prim*
 
 # Images
 *.png
