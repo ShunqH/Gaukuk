@@ -9,8 +9,8 @@ The code emphasizes **performance-oriented design** for small-to-medium scale si
 
 It currently supports:
 - Finite-volume methods for compressible flow
-- Up to **3rd-order time integration (RK3)**
-- **1st/2nd-order spatial reconstruction**
+- Up to 3rd-order time integration (RK3)
+- 1st/2nd-order spatial reconstruction
 - HLLC Riemann solver
 - Flexible and modular problem setup system
 
@@ -192,3 +192,20 @@ See:
 - More EOS models
 - Higher-order reconstruction
 - GPU acceleration
+
+---
+
+## Author
+
+Developed by **Shunquan Huang**  
+Ph.D. Candidate in Astrophysics, UNLV  
+
+---
+
+## License
+
+This project is released under the **MIT License**.  
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
