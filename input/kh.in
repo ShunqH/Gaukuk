@@ -2,14 +2,14 @@
 gamma           = 1.4           # for adiabatic eos 
 
 # simulation 
-tmax            = 50            # total time 
-dtoutput        = 0.1           # 
-stepmax         = -1            # unlimitted
+tmax            = 2             # total time 
+stepmax         = -1            # -1: unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
-RcOrder         = 2             # order of spatial reconstruction
+RcOrder         = 1             # order of spatial reconstruction
 
 # output
+dtoutput        = 2             # output every dtoutput
 dataType        = 0             # 0: output cons; 1: output prim
 
 # domain size 

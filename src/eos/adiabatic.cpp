@@ -69,8 +69,7 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
 #pragma omp parallel for collapse(2) reduction(max: cmax)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
-            Real cmaxRow = 1e-16;
-#pragma omp simd reduction(max: cmaxRow)
+#pragma omp simd reduction(max: cmax)
             for (int i=il; i<ir; i++){
                 Real& consDen = cons(DEN, k, j, i); 
                 Real& consMtx = cons(MTX, k, j, i); 
@@ -102,9 +101,8 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
                     std::abs(primVly) + cs,
                     std::abs(primVlz) + cs
                 });
-                cmaxRow = std::max(cmaxRow, local);
+                cmax = std::max(cmax, local);
             }
-            cmax = cmaxRow;
         }
     }
 }

@@ -3,13 +3,13 @@ gamma           = 1.4
 
 # simulation 
 tmax            = 10.0          # 
-dtoutput        = 0.01          # 
 stepmax         = -1            # unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
 RcOrder         = 2             # order of spatial reconstruction
 
 # output
+dtoutput        = 0.01          # output every dtoutput
 dataType        = 0             # 0: output cons; 1: output prim
 
 # domain size 

@@ -26,10 +26,10 @@ output_*
 *_0*
 *cons*
 *prim*
-*log
+*log*
 
 # Images
-*.png
+# *.png
 *.jpg
 *.jpeg
 *.gif
@@ -38,7 +38,7 @@ output_*
 *.pdf
 
 # Videos
-*.mp4
+# *.mp4
 *.mov
 *.avi
 *.mkv

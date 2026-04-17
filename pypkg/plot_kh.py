@@ -10,11 +10,13 @@ MTZ = 3
 ENG = 4 
 gamma = 1.4 
 gm1Rec = 1.0 / (gamma - 1)
-totalFrames = 101
+totalFrames = 2
 
 tlist = np.zeros(totalFrames) 
 englist = np.zeros(totalFrames)
-sPath = "./energy_test/"
+
+ROOT = "/Users/shunq/Documents/CPP/cal_gaukuk/multi_threads/"
+sPath = ROOT + "plots/"
 tag = "kh"
 
 for frameID in range(0, totalFrames):
@@ -75,7 +77,7 @@ plt.xlabel('t', fontsize = 15)
 plt.ylabel(r'$E/E0$', fontsize = 15)
 plt.grid()
 plt.title('Energy Conservation', fontsize = 15) 
-plt.savefig(sPath + tag + "_energy_conservation.png", bbox_inches='tight', dpi=600)
+plt.savefig(sPath + tag + "_energy_conservation.png", bbox_inches='tight', dpi=300)
 # plt.show()
 plt.close()
 

@@ -45,7 +45,7 @@ def main():
 
     # switch option
     parser.add_argument(
-        "--openmp",
+        "-openmp",
         action="store_true",
         help="Enable OpenMP"
     )
