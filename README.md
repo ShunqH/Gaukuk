@@ -186,16 +186,6 @@ See:
 
 ---
 
-## Features
-
-- Modular solver design
-- Up to RK3 time integration
-- 1st/2nd order reconstruction
-- OpenMP parallelization
-- Clean I/O pipeline
-
----
-
 ## Future Work
 
 - More Riemann solvers
