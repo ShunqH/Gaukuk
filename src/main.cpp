@@ -28,6 +28,7 @@ int main(int argc, char* argv[]){
 
     int outputStep = 0; 
     Real tnow = sim.GetTime(); 
+    sim.boundary.UpdateBD(sim.cons, sim.grid); 
 
     DataType outputType = DataType::Cons; 
     int oTypeFromConfig = static_cast<int>(Config::getInstance().get("dataType")); 

@@ -1,5 +1,5 @@
 # configurable options
-SETUP = kh
+SETUP = shock_tube
 EOS = adiabatic
 FLUX = hllc
-USE_OPENMP = 1
+USE_OPENMP = 0
