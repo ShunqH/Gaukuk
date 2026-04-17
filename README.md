@@ -36,8 +36,6 @@ The simulation is compared against the exact solution (red line), showing excell
 Different markers indicate varying spatial resolution and reconstruction order (e.g. `rc2_r256` = 2nd-order reconstruction with 256 grid cells).  
 The simulation uses RK2 time integration and is shown at *t = 0.2*.
 
----
-
 ### Reflected Wave
 ![wave](demo/wave.gif)
 
@@ -45,8 +43,6 @@ A Gaussian wave packet propagating in the x-direction and reflecting at domain b
 This test verifies numerical dissipation and boundary condition handling.
 
 The simulation uses RK2 with 2nd-order spatial reconstruction on a 256×128 grid.
-
----
 
 ### Kelvin–Helmholtz Instability
 ![kh](demo/kh.gif)
