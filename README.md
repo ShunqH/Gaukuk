@@ -1,27 +1,60 @@
 # Gaukuk
 
-**Gaukuk** is a lightweight, modular hydrodynamics simulation code written in C++, designed for studying compressible fluid dynamics problems and for building high-performance numerical solvers.
+**Gaukuk** is a lightweight, high-performance hydrodynamics simulation code written in C++, designed for compressible fluid dynamics on shared-memory systems.
+
+The code emphasizes **performance-oriented design** for small-to-medium scale simulations, with:
+- Fully **flattened data layout** for cache efficiency and SIMD/vectorization
+- Optimized memory access patterns to minimize bandwidth bottlenecks
+- OpenMP parallelization for multi-core CPUs
 
 It currently supports:
 - Finite-volume methods for compressible flow
 - Up to **3rd-order time integration (RK3)**
 - **1st/2nd-order spatial reconstruction**
 - HLLC Riemann solver
-- OpenMP parallelization
-- Flexible problem setup system
+- Flexible and modular problem setup system
 
 ---
 
-##  Demo
+## Design Highlights
+
+- Compile-time polymorphism for hot-path components (EOS, flux) to eliminate runtime overhead
+- Static dispatch via function pointers for integrators and boundary conditions
+- Careful separation of hot and cold paths for better performance
+- Minimal branching in inner loops to improve vectorization
+
+---
+
+## Demo
 
 ### Sod Shock Tube
 ![sod](demo/sod.png)
 
+A standard 1D Riemann problem used to validate shock-capturing schemes.  
+The simulation is compared against the exact solution (red line), showing excellent agreement in density, pressure, velocity, and internal energy.
+
+Different markers indicate varying spatial resolution and reconstruction order (e.g. `rc2_r256` = 2nd-order reconstruction with 256 grid cells).  
+The simulation uses RK2 time integration and is shown at *t = 0.2*.
+
+---
+
 ### Reflected Wave
-![kh](demo/wave.gif)
+![wave](demo/wave.gif)
+
+A Gaussian wave packet propagating in the x-direction and reflecting at domain boundaries.  
+This test verifies numerical dissipation and boundary condition handling.
+
+The simulation uses RK2 with 2nd-order spatial reconstruction on a 256×128 grid.
+
+---
 
 ### Kelvin–Helmholtz Instability
 ![kh](demo/kh.gif)
+
+A classic instability driven by velocity shear between two fluid layers.  
+This test demonstrates the code’s ability to capture small perturbations and nonlinear vortex evolution.
+
+The simulation uses periodic boundary conditions with 2nd-order accuracy in both space and time on a 256×256 grid.
 
 ---
 
@@ -68,6 +101,12 @@ Example:
 python configure.py --setup=kh -openmp
 ```
 
+Then compile
+
+```bash
+make -j
+```
+
 ---
 
 ### Option 2: Manual configuration
@@ -76,6 +115,12 @@ Edit:
 
 ```bash
 config.mk
+```
+
+Then compile
+
+```bash
+make -j
 ```
 
 ---
