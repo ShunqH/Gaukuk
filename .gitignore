@@ -29,7 +29,7 @@ output_*
 *log*
 
 # Images
-# *.png
+*.png
 *.jpg
 *.jpeg
 *.gif
@@ -38,12 +38,17 @@ output_*
 *.pdf
 
 # Videos
-# *.mp4
+*.mp4
 *.mov
 *.avi
 *.mkv
 *.webm
 *.gif
+
+# keep demo assets
+!demo/sod.png
+!demo/kh.gif
+!demo/wave.gif
 
 # Visualization outputs
 *.vtk

@@ -18,12 +18,10 @@ It currently supports:
 ![sod](demo/sod.png)
 
 ### Reflected Wave
-<!-- ![wave](demo/wave.png) -->
-<video src="demo/wave.mp4" controls width="600"></video>
+![kh](demo/wave.gif)
 
 ### Kelvin–Helmholtz Instability
-<!-- ![kh](demo/kh.mp4) -->
-<video src="demo/kh.mp4" controls width="600"></video>
+![kh](demo/kh.gif)
 
 ---
 
