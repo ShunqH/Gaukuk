@@ -19,7 +19,7 @@ else
     # Linux → use g++
     CXX = g++
     OPENMP_FLAG = -fopenmp
-    OPENMP_LIB  =
+    OPENMP_LIB  = -fopenmp
     OPENMP_INC  =
     OPENMP_LIBPATH =
 endif 
