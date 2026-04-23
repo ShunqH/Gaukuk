@@ -44,12 +44,9 @@ void Sim::Setup()
         for (int j = jl; j < jr; ++j) {
             #pragma omp simd
             for (int i = il; i < ir; ++i) {
-                int iForX = i - grid.ib;
-                int jForY = j - grid.jb;
-                int kForZ = k - grid.kb;
-                Real x = domain.xc(iForX);
-                Real y = domain.yc(jForY);
-                Real z = domain.zc(kForZ);
+                Real x = domain.xc(i);
+                Real y = domain.yc(j);
+                Real z = domain.zc(k);
 
                 // gaussian perturbation
                 Real dx = x - x0;

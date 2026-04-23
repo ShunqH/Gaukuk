@@ -1,6 +1,8 @@
+// C++ headers
 #include <cmath>            // sqrt(), abs()
 #include <algorithm>        // max()  
 
+// Gaukuk dependence
 #include "eos.hpp"
 #include "../utils/utils.hpp" // Config 
 
@@ -25,8 +27,14 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
     int jr = grid.jge;                      // last ghost cell right side + 1
     int kl = grid.kgb;                      // first ghost cell left side
     int kr = grid.kge;                      // last ghost cell right side + 1
+    if (grid.nz==1){
+        kl = grid.kb;
+        kr = grid.ke;
+    }
     Real gm1 = gamma_ - 1.0;
-#pragma omp parallel for
+    Real dmin = densityMin_;
+    Real pmin = pressureMin_;
+#pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
 #pragma omp simd 
@@ -43,7 +51,7 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
                 Real& primVlz = prim(VLZ, k, j, i); 
                 Real& primPre = prim(PRE, k, j, i); 
 
-                consDen = (consDen > densityMin_) ? consDen : densityMin_; 
+                consDen = (consDen > dmin) ? consDen : dmin; 
                 primDen = consDen; 
                 Real denInv = 1.0/consDen; 
                 primVlx = consMtx * denInv; 
@@ -51,8 +59,8 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
                 primVlz = consMtz * denInv; 
                 Real engKin = 0.5 * denInv * (consMtx*consMtx + consMty*consMty + consMtz*consMtz); 
                 primPre = gm1 * (consEng - engKin); 
-                primPre = (primPre > pressureMin_) ? primPre : pressureMin_; 
-                consEng = (primPre > pressureMin_) ? consEng : ( pressureMin_/gm1 + engKin ); 
+                primPre = (primPre > pmin) ? primPre : pmin; 
+                consEng = (primPre > pmin) ? consEng : ( pmin/gm1 + engKin ); 
             }
         }
     }
@@ -65,8 +73,14 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
     int jr = grid.jge;                      // last ghost cell right side + 1
     int kl = grid.kgb;                      // first ghost cell left side
     int kr = grid.kge;                      // last ghost cell right side + 1
+    if (grid.nz==1){
+        kl = grid.kb;
+        kr = grid.ke;
+    }
     Real gm1 = gamma_ - 1.0;
-#pragma omp parallel for collapse(2) reduction(max: cmax)
+    Real dmin = densityMin_;
+    Real pmin = pressureMin_;
+#pragma omp parallel for collapse(2) reduction(max: cmax) schedule(static)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
 #pragma omp simd reduction(max: cmax)
@@ -83,7 +97,7 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
                 Real& primVlz = prim(VLZ, k, j, i); 
                 Real& primPre = prim(PRE, k, j, i); 
 
-                consDen = (consDen > densityMin_) ? consDen : densityMin_; 
+                consDen = (consDen > dmin) ? consDen : dmin; 
                 primDen = consDen; 
                 Real denInv = 1.0/consDen; 
                 primVlx = consMtx * denInv; 
@@ -91,8 +105,8 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
                 primVlz = consMtz * denInv; 
                 Real engKin = 0.5 * denInv * (consMtx*consMtx + consMty*consMty + consMtz*consMtz); 
                 primPre = gm1 * (consEng - engKin); 
-                primPre = (primPre > pressureMin_) ? primPre : pressureMin_; 
-                consEng = (primPre > pressureMin_) ? consEng : ( pressureMin_/gm1 + engKin ); 
+                primPre = (primPre > pmin) ? primPre : pmin; 
+                consEng = (primPre > pmin) ? consEng : ( pmin/gm1 + engKin ); 
 
                 // also calculate the |v|+cs maximum
                 Real cs = std::sqrt(gamma_ * primPre * denInv);
@@ -107,6 +121,53 @@ void EquationOfState::ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, const G
     }
 }
 
+void EquationOfState::CalCmax(const TArray<Real>& cons, const Grid& grid, Real& cmax){
+    int il = grid.ib;               // first activated cell left side
+    int ir = grid.ie;               // last activated cell right side + 1
+    int jl = grid.jb;               // first activated cell left side
+    int jr = grid.je;               // last activated cell right side + 1
+    int kl = grid.kb;               // first activated cell left side
+    int kr = grid.ke;               // last activated cell right side + 1
+    if (grid.nz==1){
+        kl = grid.kb;
+        kr = grid.ke;
+    }
+    Real gm1 = gamma_ - 1.0;
+    Real dmin = densityMin_;
+    Real pmin = pressureMin_;
+
+#pragma omp parallel for collapse(2) reduction(max: cmax) schedule(static)
+    for (int k=kl; k<kr; k++){
+        for (int j=jl; j<jr; j++){
+#pragma omp simd reduction(max: cmax)
+            for (int i=il; i<ir; i++){
+                Real consDen = cons(DEN, k, j, i); 
+                Real consMtx = cons(MTX, k, j, i); 
+                Real consMty = cons(MTY, k, j, i); 
+                Real consMtz = cons(MTZ, k, j, i); 
+                Real consEng = cons(ENG, k, j, i); 
+
+                // Clamp density to local variable
+                consDen = (consDen > dmin) ? consDen : dmin;
+                Real denInv = 1.0 / consDen;
+                Real vx = consMtx * denInv;
+                Real vy = consMty * denInv;
+                Real vz = consMtz * denInv;
+                // Kinetic energy
+                Real engKin = 0.5 * (vx * consMtx + vy * consMty + vz * consMtz);
+                Real pres = gm1 * (consEng - engKin);
+                pres = (pres > pmin) ? pres : pmin;
+                Real cs = std::sqrt(gamma_ * pres * denInv);
+                Real local = std::abs(vx) + cs;
+                local = std::max(local, std::abs(vy) + cs);
+                local = std::max(local, std::abs(vz) + cs);
+                
+                cmax = std::max(cmax, local);
+            }
+        }
+    }
+}
+
 void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, const Grid& grid){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ige;                      // last ghost cell right side + 1
@@ -114,7 +175,11 @@ void EquationOfState::PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, c
     int jr = grid.jge;                      // last ghost cell right side + 1
     int kl = grid.kgb;                      // first ghost cell left side
     int kr = grid.kge;                      // last ghost cell right side + 1
-#pragma omp parallel for
+    if (grid.nz==1){
+        kl = grid.kb;
+        kr = grid.ke;
+    }
+#pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
 #pragma omp simd 

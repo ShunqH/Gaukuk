@@ -1,4 +1,5 @@
 // C++ headers 
+#include <algorithm>        //std::min 
 
 // Gaukuk dependence 
 #include "../template_array.hpp"// TArray
@@ -33,6 +34,25 @@ if (rcOrder == 1){
         }
     }
 
+  if (grid.nz==1){
+    int blockJ = 32; 
+    int k = kl; 
+    // Flux on y direction 
+    #pragma omp parallel
+    {
+        TArray<Real> ul_(NVar, lenUlUr);
+        TArray<Real> ur_(NVar, lenUlUr);
+    #pragma omp for schedule(static)
+        for (int jj=jl; jj<jr+1; jj+=blockJ){
+            recon.ReconstructYZFirstOrder(prim, ul_, k, jj-1, il, ir);
+            for (int j=jj; j<std::min(jj+blockJ, jr+1); j++){
+                recon.ReconstructYZFirstOrder(prim, ur_, k, j, il, ir);
+                RiemannSolver(ul_, ur_, VLY, eos, flx2, k, j, il, ir); 
+                ul_.Swap(ur_); 
+            }
+        }
+    }
+  }else{
     // Flux on y direction 
     #pragma omp parallel
     {
@@ -48,8 +68,7 @@ if (rcOrder == 1){
             }
         }
     }
-    
-  if (grid.nz>1){
+
     // Flux on z direction 
     #pragma omp parallel
     {
@@ -81,6 +100,26 @@ if (rcOrder == 1){
         }
     }
 
+  if (grid.nz==1){
+    int blockJ = 32; 
+    int k = kl; 
+    // Flux on y direction 
+    #pragma omp parallel
+    {
+        TArray<Real> ul_(NVar, lenUlUr);
+        TArray<Real> ur_(NVar, lenUlUr);
+        TArray<Real> ulNext_(NVar, lenUlUr);
+    #pragma omp for schedule(static)
+        for (int jj=jl; jj<jr+1; jj+=blockJ){
+            recon.ReconstructYZPLM(prim, ur_, ul_, k, jj-1, il, ir);
+            for (int j=jj; j<std::min(jj+blockJ, jr+1); j++){
+                recon.ReconstructYZPLM(prim, ur_, ulNext_, k, j, il, ir);
+                RiemannSolver(ul_, ur_, VLY, eos, flx2, k, j, il, ir); 
+                ul_.Swap(ulNext_); 
+            }
+        }
+    }
+  }else{
     // Flux on y direction 
     #pragma omp parallel
     {
@@ -97,8 +136,7 @@ if (rcOrder == 1){
             }
         }
     }
-    
-  if (grid.nz>1){
+
     // Flux on z direction 
     #pragma omp parallel
     {

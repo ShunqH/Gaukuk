@@ -59,6 +59,9 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_first_order.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_piecewise_linear.cpp \
 	   $(MAIN_DIR)/setup/setup_$(SETUP).cpp \
+	   $(MAIN_DIR)/source_term/source.cpp \
+	   $(MAIN_DIR)/source_term/const_gravity.cpp \
+	   $(MAIN_DIR)/source_term/point_gravity.cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
 

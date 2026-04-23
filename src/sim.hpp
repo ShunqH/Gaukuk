@@ -11,6 +11,7 @@
 #include "eos/eos.hpp"
 #include "flux/flux.hpp"
 #include "boundary/boundary.hpp" 
+#include "source_term/source.hpp"
 
 namespace Gaukuk{
 
@@ -19,22 +20,10 @@ enum class DataType {
     Cons
 };
 
-class Domain{
-public:
-friend class Sim; 
-    Domain(const Grid& grid); 
-
-private:
-    Real xmin, xmax, ymin, ymax, zmin, zmax; 
-    Real dx, dy, dz, drmin; 
-    Real dxRec, dyRec, dzRec; 
-    TArray<Real> xc, yc, zc;       // cell center 
-};
-
 class Sim{
 public:
-
     Sim(); 
+    bool isContinue; 
     const Grid grid; 
     const Domain domain; 
     Flux flux; 
@@ -44,6 +33,7 @@ public:
 
     EquationOfState eos; 
     Boundary boundary; 
+    SourceTerm srcTerm; 
     
     void Setup(); 
     void Advance(Real dtoutput);
@@ -54,11 +44,11 @@ public:
     Real Getdt(){ return dt; }
     int GetStep() { return step; }
 private:
-using IntegratorFunc = void (Sim::*)();
-    int step; 
+using VoidFunc = void (Sim::*)();
+    int step, stepMax; 
     Real t, dt, dtUntilOutput, cmax, CFL; 
     int rcOrder, integratorType; 
-    IntegratorFunc integrator_; 
+    VoidFunc hydroIntegrator_; 
     void ForwardEuler_(); 
     void RK2_(); 
     void RK3_(); 

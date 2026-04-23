@@ -10,14 +10,6 @@ namespace Gaukuk
 {
 
 void Sim::RK2_(){
-    // std::cout<<"check1"<<std::endl; 
-    boundary.UpdateBD(cons, grid); 
-    cmax = 1e-16;
-    eos.ConsToPrim(cons, prim, grid, cmax); 
-    dt = CFL * domain.drmin / cmax; 
-    dt = std::min(dt, dtUntilOutput); 
-    flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
-    
     int il = grid.ib; 
     int ir = grid.ie; 
     int jl = grid.jb; 
@@ -28,24 +20,27 @@ void Sim::RK2_(){
     Real dtdx = dt*domain.dxRec; 
     Real dtdy = dt*domain.dyRec; 
     Real dtdz = dt*domain.dzRec; 
+
+    boundary.UpdateBD(cons, grid); 
+    eos.ConsToPrim(cons, prim, grid); 
+    flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
 if (grid.nz == 1){ 
-    #pragma omp parallel for collapse(3) schedule(static)    
+    int k = kl; 
+    #pragma omp parallel for collapse(2) schedule(static)    
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        for (int k=kl; k<kr; k++){
-            for (int j=jl; j<jr; j++){
+        for (int j=jl; j<jr; j++){
     #pragma omp simd
-                for (int i=il; i<ir; i++){
-                    Real& u1 = consTemp_(ivar, k, j, i); 
-                    Real& u = cons(ivar, k, j, i); 
+            for (int i=il; i<ir; i++){
+                Real& u1 = consTemp_(ivar, k, j, i); 
+                Real& u = cons(ivar, k, j, i); 
 
-                    const Real fl = flx1(ivar, k, j, i); 
-                    const Real fr = flx1(ivar, k, j, i+1); 
-                    const Real gl = flx2(ivar, k, j, i); 
-                    const Real gr = flx2(ivar, k, j+1, i); 
+                const Real fl = flx1(ivar, k, j, i); 
+                const Real fr = flx1(ivar, k, j, i+1); 
+                const Real gl = flx2(ivar, k, j, i); 
+                const Real gr = flx2(ivar, k, j+1, i); 
 
-                    u1 = u - dtdx * ( fr - fl ) 
-                           - dtdy * ( gr - gl ) ; 
-                }
+                u1 = u - dtdx * ( fr - fl ) 
+                        - dtdy * ( gr - gl ) ; 
             }
         }
     }
@@ -79,24 +74,23 @@ if (grid.nz == 1){
     eos.ConsToPrim(consTemp_, prim, grid); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
 if (grid.nz == 1){ 
-    #pragma omp parallel for collapse(3) schedule(static)    
+    int k = kl; 
+    #pragma omp parallel for collapse(2) schedule(static)    
     for (int ivar=DEN; ivar<=ENG; ivar++){
-        for (int k=kl; k<kr; k++){
-            for (int j=jl; j<jr; j++){
+        for (int j=jl; j<jr; j++){
     #pragma omp simd
-                for (int i=il; i<ir; i++){
-                    Real& u1 = consTemp_(ivar, k, j, i); 
-                    Real& u = cons(ivar, k, j, i); 
+            for (int i=il; i<ir; i++){
+                Real& u1 = consTemp_(ivar, k, j, i); 
+                Real& u = cons(ivar, k, j, i); 
 
-                    const Real fl = flx1(ivar, k, j, i); 
-                    const Real fr = flx1(ivar, k, j, i+1); 
-                    const Real gl = flx2(ivar, k, j, i); 
-                    const Real gr = flx2(ivar, k, j+1, i); 
+                const Real fl = flx1(ivar, k, j, i); 
+                const Real fr = flx1(ivar, k, j, i+1); 
+                const Real gl = flx2(ivar, k, j, i); 
+                const Real gr = flx2(ivar, k, j+1, i); 
 
-                    u = 0.5 * u + 0.5 * u1 
-                        - 0.5 * (  dtdx * ( fr - fl ) 
-                                 + dtdy * ( gr - gl ) ) ; 
-                }
+                u = 0.5 * u + 0.5 * u1 
+                    - 0.5 * (  dtdx * ( fr - fl ) 
+                             + dtdy * ( gr - gl ) ) ; 
             }
         }
     }

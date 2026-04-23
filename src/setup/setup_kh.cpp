@@ -22,7 +22,6 @@ void Sim::Setup(){
     Real Lx = domain.xmax - domain.xmin; 
     Real ymin = domain.ymin; 
     Real Ly = domain.ymax - domain.ymin; 
-    const Real PI = 3.1415926535; 
 
     // activated zone
     int il = grid.ib; 
@@ -37,10 +36,8 @@ void Sim::Setup(){
         for (int j=jl; j<jr; j++){
 #pragma omp simd
             for (int i=il; i<ir; i++){
-                int iForXc = i - grid.ib; 
-                int jForYc = j - grid.jb; 
-                Real xNow = domain.xc(iForXc); 
-                Real yNow = domain.yc(jForYc); 
+                Real xNow = domain.xc(i); 
+                Real yNow = domain.yc(j); 
 
                 Real rhoNow = (std::abs(yNow)<yLayer) ? rhoIn : rhoOut ; 
                 Real vx = (std::abs(yNow)<yLayer) ? vxIn : vxOut ; 

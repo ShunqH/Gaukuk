@@ -20,7 +20,6 @@ int main(int argc, char* argv[]){
 
     Real tmax = Config::getInstance().get("tmax"); 
     Real dtoutput = Config::getInstance().get("dtoutput"); 
-    int stepmax = Config::getInstance().get("stepmax"); 
 
     Sim sim; 
     sim.Setup(); 
@@ -39,11 +38,10 @@ int main(int argc, char* argv[]){
     }
 
     sim.WriteData(outputStep, outputType); 
-    // std::cout<<sim.cons(0, sim.grid.kb, 10, 10)<<std::endl;
      
     auto time0 = std::chrono::high_resolution_clock::now();
     clock_t cputime0 = clock();
-    while (tnow<tmax && (stepmax<0 || outputStep<stepmax)){
+    while (std::abs(tmax - tnow) > 1e-12 && sim.isContinue){
         dtoutput = std::min(dtoutput, tmax-tnow); 
         sim.Advance(dtoutput); 
         tnow = sim.GetTime();
@@ -52,6 +50,7 @@ int main(int argc, char* argv[]){
         std::cout<<"output "<< outputStep << std::endl; 
         // WriteTarray(sim.flx1, "flx1", outputStep); 
     }
+
     auto time1 = std::chrono::high_resolution_clock::now();
     clock_t cputime1 = clock();
     // sim.WriteData(outputStep, outputType); 

@@ -21,4 +21,8 @@ private:
     static std::string trim(const std::string& str);
 };
 
+namespace GMath {
+    inline Real SQR(Real a){ return a*a; }
+}; 
+
 } // namespace Gaukuk

@@ -23,7 +23,6 @@ void Sim::Setup(){
     Real vxOut = Config::getInstance().get("vxOut"); 
     Real pressure = Config::getInstance().get("pressure"); 
     Real amp = Config::getInstance().get("amp"); 
-    const Real PI = 3.1415926535; 
 
     /* //------------------------------------------------------
     sim.domain includes the information below
@@ -79,12 +78,8 @@ void Sim::Setup(){
         for (int j=jl; j<jr; j++){
 #pragma omp simd
             for (int i=il; i<ir; i++){
-                // !!! note that domain.xc is nGhost/grid.ib off 
-                //     from the cons/prim grid
-                int iForXc = i - grid.ib; 
-                int jForYc = j - grid.jb; 
-                Real xNow = domain.xc(iForXc); 
-                Real yNow = domain.yc(jForYc); 
+                Real xNow = domain.xc(i); 
+                Real yNow = domain.yc(j); 
 
                 // setup shear stream with perturbations
                 Real rhoNow = (std::abs(yNow)<yLayer) ? rhoIn : rhoOut ; 

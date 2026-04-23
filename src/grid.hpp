@@ -41,4 +41,17 @@ friend class Sim;
     }
 };
 
+class Domain{
+public:
+friend class Sim; 
+friend class SourceTerm; 
+    Domain(const Grid& grid); 
+
+private:
+    Real xmin, xmax, ymin, ymax, zmin, zmax; 
+    Real dx, dy, dz, drmin; 
+    Real dxRec, dyRec, dzRec; 
+    TArray<Real> xc, yc, zc;       // cell center 
+};
+
 } // namespace Gaukuk

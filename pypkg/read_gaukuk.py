@@ -27,9 +27,13 @@ class ReadGaukuk:
             self.lenArr = self.lenz * self.leny * self.lenx 
 
             # mesh
-            self.xc = np.fromfile(f, dtype=dtype, count=self.nx)
-            self.yc = np.fromfile(f, dtype=dtype, count=self.ny)
-            self.zc = np.fromfile(f, dtype=dtype, count=self.nz)
+            self.xcg = np.fromfile(f, dtype=dtype, count=self.lenx)
+            self.ycg = np.fromfile(f, dtype=dtype, count=self.leny)
+            self.zcg = np.fromfile(f, dtype=dtype, count=self.lenz)
+
+            self.xc = self.xcg[self.nGhost: self.nGhost+self.nx]
+            self.yc = self.ycg[self.nGhost: self.nGhost+self.ny]
+            self.zc = self.zcg[self.nGhost: self.nGhost+self.nz]
 
             # data
             self.dataLen = np.fromfile(f, dtype=np.int32, count=1)[0] 

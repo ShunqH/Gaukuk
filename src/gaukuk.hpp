@@ -6,6 +6,8 @@ using Real = double;
 
 constexpr int NVar = 5;
 
+constexpr Real PI = 3.1415926535; 
+
 enum ConsIDs {DEN = 0, MTX = 1, MTY = 2, MTZ = 3, ENG = 4, }; 
 enum PrimIDs {VLX = 1, VLY = 2, VLZ = 3, PRE = 4, }; 
 
