@@ -49,10 +49,12 @@ using VoidFunc = void (Sim::*)();
     Real t, dt, dtUntilOutput, cmax, CFL; 
     int rcOrder, integratorType; 
     VoidFunc hydroIntegrator_; 
+    void UpdateCons(const TArray<Real>& cons_, TArray<Real>& consTemp_, const Real coef1, const Real coef2); 
+    void UpdateCons(const TArray<Real>& cons_, TArray<Real>& consTemp_, const Real coef1, const Real coef2, const Real coef3); 
     void ForwardEuler_(); 
     void RK2_(); 
     void RK3_(); 
-    TArray<Real> consTemp_, consTemp2_; 
+    TArray<Real> consTemp, consTemp2; 
 }; 
 
 } // namespace Gaukuk

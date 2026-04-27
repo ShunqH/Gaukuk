@@ -1,6 +1,7 @@
 #pragma once 
 
 // C++ headers 
+#include <iostream>     // std::cout; std::endl; std::cerr
 
 // Gaukuk dependence
 #include "../gaukuk.hpp" 
@@ -36,6 +37,8 @@ private:
         Real multi = a*b; 
         Real sigma = 2.0 * multi / (a + b); 
         return (multi <= 0.0) ? 0.0 : sigma;
+        // if (a*b <= 0.0) return 0.0;
+        // return (2.0 * a * b) / (a + b);
     }
 
     inline Real MC(Real a, Real b) {

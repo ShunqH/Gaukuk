@@ -9,11 +9,14 @@
 
 namespace Gaukuk{
     
-void SourceTerm::UpdateSource(TArray<Real>& cons, const Real dt, const Grid& grid, const Domain& domain){
+void SourceTerm::UpdateSource(TArray<Real>& cons, const Real t, const Real dt, const Grid& grid, const Domain& domain){
     if (hasConstAcc){
         ConstGravity(cons, dt, grid); 
-    }else if (hasPointG){
+    }
+    if (hasPointG){
         PointGravity(cons, dt, grid, domain); 
+    }else if (hasBinary){
+        BinaryGravity(cons, t, dt, grid, domain); 
     }
 }
 
@@ -41,6 +44,11 @@ void SourceTerm::EnrollPointGravity(Real gm, Real x, Real y, Real z,
         obj1.vy = vy;
         obj1.vz = vz;
         obj1.rs = rs;
+
+        ab_ = std::sqrt( (x-obj0.x)*(x-obj0.x) + (y-obj0.y)*(y-obj0.y) + (z-obj0.z)*(z-obj0.z) ); 
+        omega_ = std::sqrt((obj0.gm + gm)/(ab_*ab_*ab_)); 
+
+        theta0_ = std::atan2(y-obj0.y, x-obj0.x); 
         hasBinary = true;
         hasPointG = false;
         sourceEnrolled = true; 

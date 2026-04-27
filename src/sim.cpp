@@ -51,6 +51,7 @@ Sim::Sim(): isContinue(true), domain(grid), flux(grid.lenx),
     flx1.NewArray(NVar, grid.lenz, grid.leny, grid.lenx+1); 
     flx2.NewArray(NVar, grid.lenz, grid.leny+1, grid.lenx); 
     flx3.NewArray(NVar, grid.lenz+1, grid.leny, grid.lenx); 
+    consTemp.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
     
     integratorType = static_cast<int>(Config::getInstance().get("integrator", 2)); 
     rcOrder = static_cast<int>(Config::getInstance().get("RcOrder", 1));
@@ -59,10 +60,8 @@ Sim::Sim(): isContinue(true), domain(grid), flux(grid.lenx),
     if (integratorType == 1) {
         hydroIntegrator_ = &Sim::ForwardEuler_; 
     }else if (integratorType == 3) {
-        consTemp_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
         hydroIntegrator_ = &Sim::RK3_; 
     }else {
-        consTemp_.NewArray(NVar, grid.lenz, grid.leny, grid.lenx); 
         hydroIntegrator_ = &Sim::RK2_; 
     }
 }
@@ -84,11 +83,11 @@ void Sim::Advance(Real dtoutput){
         // Strang Splitting 
         // source(0.5*dt) -> hydro(dt) -> source(0.5*dt)
         if (srcTerm.sourceEnrolled){
-            srcTerm.UpdateSource(cons, 0.5*dt, grid, domain); 
+            srcTerm.UpdateSource(cons, t+0.5*dt, 0.5*dt, grid, domain); 
         }
         (this->*hydroIntegrator_)(); 
         if (srcTerm.sourceEnrolled){
-            srcTerm.UpdateSource(cons, 0.5*dt, grid, domain); 
+            srcTerm.UpdateSource(cons, t + dt, 0.5*dt, grid, domain); 
         }
 
         t += dt; 

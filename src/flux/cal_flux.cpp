@@ -1,5 +1,5 @@
 // C++ headers 
-#include <algorithm>        //std::min 
+#include <algorithm>        //std::min() 
 
 // Gaukuk dependence 
 #include "../template_array.hpp"// TArray

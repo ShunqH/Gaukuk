@@ -13,9 +13,9 @@ namespace Gaukuk{
 class EquationOfState{
 public:
     EquationOfState(); 
-    void ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
+    void ConsToPrim(const TArray<Real>& cons, TArray<Real>& prim, 
                     const Grid& grid); 
-    void ConsToPrim(TArray<Real>& cons, TArray<Real>& prim, 
+    void ConsToPrim(const TArray<Real>& cons, TArray<Real>& prim, 
                     const Grid& grid, Real& cmax); 
     void CalCmax(const TArray<Real>& cons, const Grid& grid, Real& cmax);  
     void PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
@@ -32,7 +32,7 @@ public:
     }
     
 private:
-    Real gamma_, densityMin_, pressureMin_, gm1Rec_; 
+    Real gamma_, gm1Rec_; 
 };
 
 

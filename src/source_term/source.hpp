@@ -29,9 +29,10 @@ public:
                  gx_(0.0), gy_(0.0), gz_(0.0){} 
     bool sourceEnrolled; 
 
-    void UpdateSource(TArray<Real>& cons, const Real dt, const Grid& grid, const Domain& domain); 
+    void UpdateSource(TArray<Real>& cons, const Real t,  const Real dt, const Grid& grid, const Domain& domain); 
     void ConstGravity(TArray<Real>& cons, const Real dt, const Grid& grid);
     void PointGravity(TArray<Real>& cons, const Real dt, const Grid& grid, const Domain& domain); 
+    void BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, const Grid& grid, const Domain& domain); 
     
     void EnrollConstGravityVector(Real gx, Real gy, Real gz); 
     void EnrollPointGravity(Real gm, Real x, Real y, Real z, 
@@ -43,6 +44,7 @@ private:
     Real gx_, gy_, gz_; 
     // for binary / star-planet
     GravitySource obj0, obj1; 
+    Real omega_, ab_, theta0_; 
 
 };
 

@@ -24,6 +24,8 @@ Boundary::Boundary(){
         Bdxl = &PeriodicXL;
     }else if (typeBDXL == 2){
         Bdxl = &ReflectiveXL;
+    }else if (typeBDXL == 3){
+        Bdxl = &OutflowXL;
     }else{
         Bdxl = &OutflowCopyXL;
     }
@@ -35,6 +37,8 @@ Boundary::Boundary(){
         Bdxr = &PeriodicXR;
     }else if (typeBDXR == 2){
         Bdxr = &ReflectiveXR;
+    }else if (typeBDXR == 3){
+        Bdxr = &OutflowXR;
     }else{
         Bdxr = &OutflowCopyXR;
     }
@@ -46,6 +50,8 @@ Boundary::Boundary(){
         Bdyl = &PeriodicYL;
     }else if (typeBDYL == 2){
         Bdyl = &ReflectiveYL;
+    }else if (typeBDYL == 3){
+        Bdyl = &OutflowYL;
     }else{
         Bdyl = &OutflowCopyYL;
     }
@@ -57,6 +63,8 @@ Boundary::Boundary(){
         Bdyr = &PeriodicYR;
     }else if (typeBDYR == 2){
         Bdyr = &ReflectiveYR;
+    }else if (typeBDYR == 3){
+        Bdyr = &OutflowYR;
     }else{
         Bdyr = &OutflowCopyYR;
     }
@@ -68,6 +76,8 @@ Boundary::Boundary(){
         Bdzl = &PeriodicZL;
     }else if (typeBDZL == 2){
         Bdzl = &ReflectiveZL;
+    }else if (typeBDZL == 3){
+        Bdzl = &OutflowZL;
     }else{
         Bdzl = &OutflowCopyYL;
     }
@@ -79,6 +89,8 @@ Boundary::Boundary(){
         Bdzr = &PeriodicZR;
     }else if (typeBDZR == 2){
         Bdzr = &ReflectiveZR;
+    }else if (typeBDZR == 3){
+        Bdzr = &OutflowZR;
     }else{
         Bdzr = &OutflowCopyYR;
     }

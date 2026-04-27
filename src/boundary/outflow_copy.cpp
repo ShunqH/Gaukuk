@@ -20,7 +20,7 @@ void Boundary::OutflowCopyXL(TArray<Real>& cons, const Grid& grid){
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
-    int iAct = ir;                          // copy cell's id
+    int iTarget = ir;                       // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z activated zone  
@@ -30,9 +30,9 @@ void Boundary::OutflowCopyXL(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x ghost zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, k, j, iAct); 
+                    Real uTarget = cons(ivar, k, j, iTarget); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }
@@ -48,7 +48,7 @@ void Boundary::OutflowCopyXR(TArray<Real>& cons, const Grid& grid){
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
-    int iAct = il - 1;                      // copy cell's id
+    int iTarget = il - 1;                   // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z activated zone  
@@ -58,9 +58,9 @@ void Boundary::OutflowCopyXR(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x ghost zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, k, j, iAct); 
+                    Real uTarget = cons(ivar, k, j, iTarget); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }
@@ -76,7 +76,7 @@ void Boundary::OutflowCopyYL(TArray<Real>& cons, const Grid& grid){
     int jr = grid.jb;                       // first activated cell 
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
-    int jAct = jr;                          // copy cell's id
+    int jTarget = jr;                       // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z activated zone  
@@ -86,9 +86,9 @@ void Boundary::OutflowCopyYL(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x activated zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, k, jAct, i); 
+                    Real uTarget = cons(ivar, k, jTarget, i); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }
@@ -104,7 +104,7 @@ void Boundary::OutflowCopyYR(TArray<Real>& cons, const Grid& grid){
     int jr = grid.jge;                      // last ghost cell right side + 1
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
-    int jAct = jl - 1;                      // copy cell's id
+    int jTarget = jl - 1;                   // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z activated zone  
@@ -114,9 +114,9 @@ void Boundary::OutflowCopyYR(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x activated zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, k, jAct, i); 
+                    Real uTarget = cons(ivar, k, jTarget, i); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }
@@ -132,7 +132,7 @@ void Boundary::OutflowCopyZL(TArray<Real>& cons, const Grid& grid){
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kgb;                      // first ghost cell left side 
     int kr = grid.kb;                       // first activated cell 
-    int kAct = kr;                          // copy cell's id
+    int kTarget = kr;                       // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z ghost zone  
@@ -142,9 +142,9 @@ void Boundary::OutflowCopyZL(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x activated zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, kAct, j, i); 
+                    Real uTarget = cons(ivar, kTarget, j, i); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }
@@ -160,7 +160,7 @@ void Boundary::OutflowCopyZR(TArray<Real>& cons, const Grid& grid){
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.ke;                       // first ghost cell right side  
     int kr = grid.kge;                      // last ghost cell right side + 1
-    int kAct = kl - 1;                      // copy cell's id
+    int kTarget = kl - 1;                   // copy cell's id
 #pragma omp parallel for collapse(3) schedule(static)
     for (int ivar=DEN; ivar<=ENG; ivar++){
         // loop z ghost zone  
@@ -170,9 +170,9 @@ void Boundary::OutflowCopyZR(TArray<Real>& cons, const Grid& grid){
 #pragma omp simd
                 // loop x activated zone
                 for (int i=il; i<ir; i++){
-                    const Real& uAct = cons(ivar, kAct, j, i); 
+                    Real uTarget = cons(ivar, kTarget, j, i); 
                     Real& u = cons(ivar, k, j, i); 
-                    u = uAct;
+                    u = uTarget;
                 }
             }
         }

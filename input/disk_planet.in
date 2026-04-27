@@ -1,25 +1,25 @@
 # simulation 
-tmax            = 628.31853     # total time 
+tmax            = 628.31853072  # total time 
 stepmax         = -1            # -1: unlimitted
-CFL             = 0.4           # CFL number ( CFL < 1 ), dt depends on CFL
+CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
 RcOrder         = 2             # order of spatial reconstruction
 
 # output
-dtoutput        = 1.25663706    # output every dtoutput
+dtoutput        = 0.6283185307  # output every dtoutput
 dataType        = 0             # 0: output cons; 1: output prim
 
 # domain size 
-xmin            = -4 
-xmax            = 4 
-ymin            = -4
-ymax            = 4 
+xmin            = -2 
+xmax            = 2 
+ymin            = -2
+ymax            = 2 
 zmin            = -0.5
 zmax            = 0.5 
 
 # mesh 
-NX              = 256           # resolution on x   
-NY              = 256           # resolution on y    
+NX              = 512           # resolution on x   
+NY              = 512           # resolution on y    
 NZ              = 1             # resolution on z  
 NGhost          = 2             # number of ghost cell 
 
@@ -38,19 +38,20 @@ gamma           = 1.66666667    # for adiabatic eos
 # problem setup
 ## star 
 GM              = 1.0           # note that 2pi in code unit is one yr 
-rs              = 0.1           # smoothing length 
+rs0             = 0.05          # smoothing length 
+
+## planet 
+GMp             = 0.1           # note that 2pi in code unit is one yr 
+rp              = 1.0           # planet orbit radius     
+rs1             = 0.05          # smoothing length 
 
 ## disk
 r0              = 1.0           
 rho0            = 1.0           # rho(r) = rho0 * (r/r0)^{-p}
 p               = 1.0  
-cs0             = 0.1           # cs(r) = cs0 * (r/r0)^{-q/2}
+cs0             = 0.01          # cs(r) = cs0 * (r/r0)^{-q/2}
 q               = 1.0 
          
-## Rossby wave instability 
-gapWidth        = 0.05          # gap width 
-gapDepth        = 0.5           # gap depth (ratio)
-amp             = 0.05          # perturbation
-km              = 2             # wavenumber
+
 
 

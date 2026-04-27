@@ -66,6 +66,15 @@ friend class Sim;
     static void ReflectiveZL(TArray<Real>& cons, const Grid& grid); 
     static void ReflectiveZR(TArray<Real>& cons, const Grid& grid); 
 
+    // outflow boundary condition
+    static void OutflowXL(TArray<Real>& cons, const Grid& grid); 
+    static void OutflowXR(TArray<Real>& cons, const Grid& grid); 
+    static void OutflowYL(TArray<Real>& cons, const Grid& grid); 
+    static void OutflowYR(TArray<Real>& cons, const Grid& grid); 
+    static void OutflowZL(TArray<Real>& cons, const Grid& grid); 
+    static void OutflowZR(TArray<Real>& cons, const Grid& grid); 
+
+    // user define boundary condition 
     static void SelfDefineBDXL(TArray<Real>& cons, const Grid& grid); 
     static void SelfDefineBDXR(TArray<Real>& cons, const Grid& grid); 
     static void SelfDefineBDYL(TArray<Real>& cons, const Grid& grid); 

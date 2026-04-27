@@ -1,5 +1,5 @@
-// C++ Headers
-// #include <iostream>     // std::cout; std::endl; std::cerr
+// C++ headers
+#include <algorithm>                // std::min(), std::max()
 
 // Gaukuk dependence
 #include "../gaukuk.hpp" 
@@ -9,21 +9,24 @@
 namespace Gaukuk
 {
 
-// *** reflective boundary condition ***
+// ***** Outflow boundary condition *****
 //
-// mirror the activated cell to the ghost cells 
-// along the boundary
+// copy the edge cell of the activated zone 
+// to all the ghost cell next to it. 
+// if v_n is inflow, set to 0.  
 //
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowXL(TArray<Real>& cons, const Grid& grid){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
+    // loop z activated zone  
     for (int k=kl; k<kr; k++){
         // loop y activated zone 
         for (int j=jl; j<jr; j++){
@@ -41,11 +44,21 @@ void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
-                rho = rhoTarget;
-                mtx = - mtxTarget;          // reflect momentum in x 
-                mty = mtyTarget;
-                mtz = mtzTarget;
-                eng = engTarget;
+
+                Real mtxClamp = std::min(mtxTarget, 0.0); 
+                rhoTarget = std::max(rhoTarget, denMin); 
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtxTarget*mtxTarget; 
+                Real keNew = 0.5*rhoInv*mtxClamp*mtxClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
+                rho = rhoTarget; 
+                mtx = mtxClamp; 
+                mty = mtyTarget; 
+                mtz = mtzTarget; 
+                eng = engNew; 
             }
         }
     }
@@ -53,13 +66,14 @@ void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // X direction, right side 
-void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowXR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
     // loop z activated zone  
     for (int k=kl; k<kr; k++){
@@ -79,11 +93,21 @@ void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
+
+                Real mtxClamp = std::max(mtxTarget, 0.0); 
+                rhoTarget = std::max(rhoTarget, denMin); 
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtxTarget*mtxTarget; 
+                Real keNew = 0.5*rhoInv*mtxClamp*mtxClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
                 rho = rhoTarget;
-                mtx = - mtxTarget;          // reflect momentum in x 
+                mtx = mtxClamp;     
                 mty = mtyTarget;
                 mtz = mtzTarget;
-                eng = engTarget;
+                eng = engNew;
             }
         }
     }
@@ -91,13 +115,14 @@ void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, left side 
-void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowYL(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
     int jr = grid.jb;                       // first activated cell 
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
     // loop z activated zone  
     for (int k=kl; k<kr; k++){
@@ -117,11 +142,21 @@ void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
+
+                Real mtyClamp = std::min(mtyTarget, 0.0); 
+                rhoTarget = std::max(rhoTarget, denMin); 
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtyTarget*mtyTarget; 
+                Real keNew = 0.5*rhoInv*mtyClamp*mtyClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
                 rho = rhoTarget;
                 mtx = mtxTarget;           
-                mty = - mtyTarget;          // reflect momentum in y
+                mty = mtyClamp;     
                 mtz = mtzTarget;
-                eng = engTarget;
+                eng = engNew;
             }
         }
     }
@@ -129,13 +164,14 @@ void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, right side 
-void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowYR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
     int jr = grid.jge;                      // last ghost cell right side + 1
     int kl = grid.kb;                       // first activated cell 
     int kr = grid.ke;                       // first ghost cell right side
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
     // loop z activated zone  
     for (int k=kl; k<kr; k++){
@@ -155,11 +191,21 @@ void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
+
+                Real mtyClamp = std::max(mtyTarget, 0.0); 
+                rhoTarget = std::max(rhoTarget, denMin); 
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtyTarget*mtyTarget; 
+                Real keNew = 0.5*rhoInv*mtyClamp*mtyClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
                 rho = rhoTarget;
                 mtx = mtxTarget;           
-                mty = - mtyTarget;          // reflect momentum in y
+                mty = mtyClamp;        
                 mtz = mtzTarget;
-                eng = engTarget;
+                eng = engNew;
             }
         }
     }
@@ -167,13 +213,14 @@ void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, left side 
-void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowZL(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.kgb;                      // first ghost cell left side 
     int kr = grid.kb;                       // first activated cell 
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
     // loop z ghost zone  
     for (int k=kl; k<kr; k++){
@@ -193,11 +240,21 @@ void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
+
+                Real mtzClamp = std::min(mtzTarget, 0.0);
+                rhoTarget = std::max(rhoTarget, denMin);  
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtzTarget*mtzTarget; 
+                Real keNew = 0.5*rhoInv*mtzClamp*mtzClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
                 rho = rhoTarget;
                 mtx = mtxTarget;           
                 mty = mtyTarget;          
-                mtz = - mtzTarget;          // reflect momentum in z
-                eng = engTarget;
+                mtz = mtzClamp;      
+                eng = engNew;
             }
         }
     }
@@ -205,13 +262,14 @@ void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, right side 
-void Boundary::ReflectiveZR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowZR(TArray<Real>& cons, const Grid& grid){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
     int jr = grid.je;                       // first ghost cell right side
     int kl = grid.ke;                       // first ghost cell right side  
     int kr = grid.kge;                      // last ghost cell right side + 1
+    const Real denMin = DENSITY_FLOOR; 
 #pragma omp parallel for collapse(2) schedule(static)
     // loop z ghost zone  
     for (int k=kl; k<kr; k++){
@@ -231,11 +289,21 @@ void Boundary::ReflectiveZR(TArray<Real>& cons, const Grid& grid){
                 Real& mty = cons(MTY, k, j, i); 
                 Real& mtz = cons(MTZ, k, j, i); 
                 Real& eng = cons(ENG, k, j, i); 
+
+                Real mtzClamp = std::max(mtzTarget, 0.0); 
+                rhoTarget = std::max(rhoTarget, denMin); 
+                Real rhoInv = 1.0/rhoTarget; 
+                Real keOld = 0.5*rhoInv*mtzTarget*mtzTarget; 
+                Real keNew = 0.5*rhoInv*mtzClamp*mtzClamp; 
+                Real eint = engTarget - keOld;
+                eint = std::max(eint, 1e-16);
+                Real engNew = eint + keNew;
+
                 rho = rhoTarget;
                 mtx = mtxTarget;           
                 mty = mtyTarget;          
-                mtz = - mtzTarget;          // reflect momentum in z
-                eng = engTarget;
+                mtz = mtzClamp;         
+                eng = engNew;
             }
         }
     }

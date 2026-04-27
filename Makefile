@@ -1,9 +1,12 @@
+# load config.mk 
 -include config.mk
-
 SETUP ?= kh
 EOS ?= adiabatic
 FLUX ?= hllc
 USE_OPENMP ?= 0
+USE_SINGLE_PRECISION ?= 0
+GAUKUK_DENSITY_FLOOR ?= 1e-16
+GAUKUK_PRESSURE_FLOOR ?= 1e-16
 
 # define
 UNAME_S := $(shell uname -s)
@@ -24,10 +27,20 @@ else
     OPENMP_LIBPATH =
 endif 
 
-CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall \
-#            -Rpass=loop-vectorize										 \
+# select precision flag
+ifeq ($(USE_SINGLE_PRECISION),1)
+    PRECISION_FLAG = -DGAUKUK_USE_FLOAT
+else
+    PRECISION_FLAG =
+endif
+
+CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall
+# CXXFLAGS += -Rpass=loop-vectorize
 # 		   -fopt-info-vec-optimized 
 # CXXFLAGS = -O0 -march=native -ffast-math -funroll-loops -std=c++14 -Wall 
+CXXFLAGS += $(PRECISION_FLAG)
+CXXFLAGS += -DGAUKUK_DENSITY_FLOOR=$(GAUKUK_DENSITY_FLOOR) \
+            -DGAUKUK_PRESSURE_FLOOR=$(GAUKUK_PRESSURE_FLOOR)
 INCLUDES = -Isrc
 LDFLAGS =
 
@@ -49,6 +62,7 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/eos/$(EOS).cpp \
 	   $(MAIN_DIR)/flux/cal_flux.cpp \
 	   $(MAIN_DIR)/flux/$(FLUX).cpp \
+	   $(MAIN_DIR)/evolution/update_cons.cpp \
 	   $(MAIN_DIR)/evolution/forward_euler.cpp \
 	   $(MAIN_DIR)/evolution/rk2.cpp \
 	   $(MAIN_DIR)/evolution/rk3.cpp \
@@ -56,12 +70,14 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/boundary/outflow_copy.cpp \
 	   $(MAIN_DIR)/boundary/periodic.cpp \
 	   $(MAIN_DIR)/boundary/reflective.cpp \
+	   $(MAIN_DIR)/boundary/outflow.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_first_order.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_piecewise_linear.cpp \
 	   $(MAIN_DIR)/setup/setup_$(SETUP).cpp \
 	   $(MAIN_DIR)/source_term/source.cpp \
 	   $(MAIN_DIR)/source_term/const_gravity.cpp \
 	   $(MAIN_DIR)/source_term/point_gravity.cpp \
+	   $(MAIN_DIR)/source_term/binary_gravity.cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
 
