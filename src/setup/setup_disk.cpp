@@ -53,12 +53,13 @@ void Sim::Setup() {
                 Real rhob = rho0 * std::pow(r*r0Inv, -p);
                 Real gaussian = 1 - gapDepth * std::exp(-0.5*(r-r0)*(r-r0)*deltaInv*deltaInv); 
                 Real rhoNow = (r<rs) ? 1e-6 : rhob * gaussian; 
+                // Real rhoNow = rhob * gaussian;
 
                 Real cs = cs0 * std::pow(r*r0Inv, -0.5*q); 
                 Real pressure = gammaInv*cs*cs*rhoNow; 
 
                 Real theta = std::atan2(yNow, xNow); 
-                Real vPtb = amp*(1.0 + std::cos( km*theta )) ;
+                Real vPtb = amp*(std::cos( km*theta )) ;
 
                 Real r2s = r2 + rs*rs;
                 Real v_phi = std::sqrt( GM * r2 / (r2s * std::sqrt(r2s))  
@@ -71,13 +72,13 @@ void Sim::Setup() {
                 Real vx = -v_phi * (yNow * rInv);
                 Real vy =  v_phi * (xNow * rInv);
 
-                if (r < rs) {
-                    // Real factor = r / rs;
-                    // vx *= factor;
-                    // vy *= factor;
-                    vx = 0;
-                    vy = 0;
-                }
+                // if (r < rs) {
+                //     // Real factor = r / rs;
+                //     // vx *= factor;
+                //     // vy *= factor;
+                //     vx = 0;
+                //     vy = 0;
+                // }
 
                 prim(DEN, k, j, i) = rhoNow;
                 prim(VLX, k, j, i) = vx;

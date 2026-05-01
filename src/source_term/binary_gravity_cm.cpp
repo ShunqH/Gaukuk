@@ -24,9 +24,16 @@ void SourceTerm::BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, 
     const Real rs1 = obj1.rs; 
     const Real gm1dt = gm1*dt; 
 
-    Real theta = omega_ * t + theta1_; 
-    obj1.x = ab_ * std::cos(theta);
-    obj1.y = ab_ * std::sin(theta);
+    Real theta1 = omega_ * t + theta1_; 
+    Real theta0 = omega_ * t + theta1_ + PI; 
+    Real gmTot = obj0.gm + obj1.gm; 
+    Real r0 = obj1.gm * ab_ / gmTot; 
+    Real r1 = obj0.gm * ab_ / gmTot; 
+
+    obj0.x = r0 * std::cos(theta0);
+    obj0.y = r0 * std::sin(theta0);
+    obj1.x = r1 * std::cos(theta1);
+    obj1.y = r1 * std::sin(theta1);
 
     Real x0 = obj0.x; 
     Real y0 = obj0.y; 
@@ -35,11 +42,6 @@ void SourceTerm::BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, 
     Real x1 = obj1.x; 
     Real y1 = obj1.y; 
     Real z1 = obj1.z; 
-
-    // indirect source trem since this is not a barycenter frame
-    Real r1Prim = std::sqrt(x1*x1 + y1*y1 + z1*z1); 
-    Real r1pInv = 1.0/r1Prim; 
-    Real gIndirdtdr1 = - gm1dt * r1pInv * r1pInv * r1pInv; 
 
     #pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
@@ -65,28 +67,15 @@ void SourceTerm::BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, 
                 Real r1SmoInv = 1.0 / std::sqrt(r1Sqr + rs1*rs1);
                 Real g1Vecdtdr = - gm1dt * r1SmoInv * r1SmoInv * r1SmoInv;
 
-                Real gxdt = g0Vecdtdr * delx0 + g1Vecdtdr * delx1 + gIndirdtdr1 * x1; 
-                Real gydt = g0Vecdtdr * dely0 + g1Vecdtdr * dely1 + gIndirdtdr1 * y1; 
-                Real gzdt = g0Vecdtdr * delz0 + g1Vecdtdr * delz1 + gIndirdtdr1 * z1; 
+                Real gxdt = g0Vecdtdr * delx0 + g1Vecdtdr * delx1; 
+                Real gydt = g0Vecdtdr * dely0 + g1Vecdtdr * dely1; 
+                Real gzdt = g0Vecdtdr * delz0 + g1Vecdtdr * delz1; 
 
                 Real& consDen = cons(DEN, k, j, i); 
                 Real& consMtx = cons(MTX, k, j, i); 
                 Real& consMty = cons(MTY, k, j, i); 
                 Real& consMtz = cons(MTZ, k, j, i); 
                 Real& consEng = cons(ENG, k, j, i); 
-
-                // Real mask =  (r0Sqr < 5*5 * rs0*rs0) ? DENSITY_FLOOR : 1; 
-                // Real newDen = mask * consDen ; 
-                // Real newMtx = mask * (consMtx + consDen*gxdt); 
-                // Real newMty = mask * (consMty + consDen*gydt); 
-                // Real newMtz = mask * (consMtz + consDen*gzdt); 
-                // Real newEng = mask * (consEng + consMtx*gxdt + consMty*gydt + consMtz*gzdt);
-
-                // consDen = newDen; 
-                // consMtx = newMtx; 
-                // consMty = newMty; 
-                // consMtz = newMtz; 
-                // consEng = newEng; 
                 
                 consEng += consMtx*gxdt + consMty*gydt + consMtz*gzdt;
                 consMtx += consDen*gxdt;

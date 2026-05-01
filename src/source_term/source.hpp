@@ -33,6 +33,7 @@ public:
     void ConstGravity(TArray<Real>& cons, const Real dt, const Grid& grid);
     void PointGravity(TArray<Real>& cons, const Real dt, const Grid& grid, const Domain& domain); 
     void BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, const Grid& grid, const Domain& domain); 
+    void InnerWaveKilling(TArray<Real>& cons, const Real dt, const Grid& grid, const Domain& domain);
     
     void EnrollConstGravityVector(Real gx, Real gy, Real gz); 
     void EnrollPointGravity(Real gm, Real x, Real y, Real z, 
@@ -44,7 +45,7 @@ private:
     Real gx_, gy_, gz_; 
     // for binary / star-planet
     GravitySource obj0, obj1; 
-    Real omega_, ab_, theta0_; 
+    Real omega_, ab_, theta0_, theta1_; 
 
 };
 

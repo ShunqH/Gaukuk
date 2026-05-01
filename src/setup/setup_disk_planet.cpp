@@ -48,7 +48,7 @@ void Sim::Setup() {
                 Real r = std::sqrt(r2); 
                 Real rInv = 1.0/(r + 1e-12); 
 
-                Real rhoNow = rho0 * std::pow(r*r0Inv, -p);
+                Real rhoNow = (r<5*rs0) ? 1e-6 : rho0 * std::pow(r*r0Inv, -p);
 
                 Real cs = cs0 * std::pow(r*r0Inv, -0.5*q); 
                 Real pressure = gammaInv*cs*cs*rhoNow; 
@@ -63,13 +63,13 @@ void Sim::Setup() {
                 Real vx = -v_phi * (yNow * rInv);
                 Real vy =  v_phi * (xNow * rInv);
 
-                if (r < rs0) {
-                    // Real factor = r / rs;
-                    // vx *= factor;
-                    // vy *= factor;
-                    vx = 0;
-                    vy = 0;
-                }
+                // if (r < rs0) {
+                //     // Real factor = r / rs;
+                //     // vx *= factor;
+                //     // vy *= factor;
+                //     vx = 0;
+                //     vy = 0;
+                // }
 
                 prim(DEN, k, j, i) = rhoNow;
                 prim(VLX, k, j, i) = vx;

@@ -36,19 +36,31 @@ void SourceTerm::EnrollPointGravity(Real gm, Real x, Real y, Real z,
         throw std::runtime_error("Setup failed: too many point gravity.");
     }
     if (hasPointG) {
-        obj1.gm = gm;
-        obj1.x = x;
-        obj1.y = y;
-        obj1.z = z;
-        obj1.vx = vx;
-        obj1.vy = vy;
-        obj1.vz = vz;
-        obj1.rs = rs;
-
         ab_ = std::sqrt( (x-obj0.x)*(x-obj0.x) + (y-obj0.y)*(y-obj0.y) + (z-obj0.z)*(z-obj0.z) ); 
-        omega_ = std::sqrt((obj0.gm + gm)/(ab_*ab_*ab_)); 
+        Real gmTot = obj0.gm + gm; 
+        omega_ = std::sqrt(gmTot/(ab_*ab_*ab_)); 
+        Real r0 = gm * ab_ / gmTot; 
+        Real r1 = obj0.gm * ab_ / gmTot; 
 
         theta1_ = std::atan2(y-obj0.y, x-obj0.x); 
+        theta0_ = theta1_ + PI; 
+
+        obj1.gm = gm;
+        obj1.x = r1;
+        obj1.y = 0;
+        obj1.z = 0;
+        obj1.vx = 0;
+        obj1.vy = 0;
+        obj1.vz = 0;
+        obj1.rs = rs;
+
+        obj0.x = -r0;
+        obj0.y = 0;
+        obj0.z = 0;
+        obj0.vx = 0;
+        obj0.vy = 0;
+        obj0.vz = 0;
+
         hasBinary = true;
         hasPointG = false;
         sourceEnrolled = true; 

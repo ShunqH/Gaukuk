@@ -78,6 +78,7 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/source_term/const_gravity.cpp \
 	   $(MAIN_DIR)/source_term/point_gravity.cpp \
 	   $(MAIN_DIR)/source_term/binary_gravity.cpp \
+	   $(MAIN_DIR)/source_term/inner_wave_killing.cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
 
