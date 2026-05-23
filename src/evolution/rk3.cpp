@@ -9,17 +9,17 @@ namespace Gaukuk
 {
 
 void Sim::RK3_(){
-    boundary.UpdateBD(cons, grid); 
+    boundary.UpdateBD(cons, grid, domain, eos); 
     eos.ConsToPrim(cons, prim, grid); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
     UpdateCons(cons, consTemp, 1.0, 1.0); 
 
-    boundary.UpdateBD(consTemp, grid); 
+    boundary.UpdateBD(consTemp, grid, domain, eos); 
     eos.ConsToPrim(consTemp, prim, grid); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
     UpdateCons(cons, consTemp, 0.75, 0.25, 0.25); 
 
-    boundary.UpdateBD(consTemp, grid); 
+    boundary.UpdateBD(consTemp, grid, domain, eos); 
     eos.ConsToPrim(consTemp, prim, grid); 
     flux.CalFlux(grid, prim, eos, flx1, flx2, flx3, rcOrder); 
     Real frac13 = 1.0/3.0; 

@@ -16,7 +16,7 @@ namespace Gaukuk
 //
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::PeriodicXL(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicXL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
@@ -45,7 +45,7 @@ void Boundary::PeriodicXL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // X direction, right side 
-void Boundary::PeriodicXR(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicXR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
@@ -74,7 +74,7 @@ void Boundary::PeriodicXR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, left side 
-void Boundary::PeriodicYL(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicYL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
@@ -103,7 +103,7 @@ void Boundary::PeriodicYL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, right side 
-void Boundary::PeriodicYR(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicYR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
@@ -132,7 +132,7 @@ void Boundary::PeriodicYR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, left side 
-void Boundary::PeriodicZL(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicZL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
@@ -161,7 +161,7 @@ void Boundary::PeriodicZL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, right side 
-void Boundary::PeriodicZR(TArray<Real>& cons, const Grid& grid){
+void Boundary::PeriodicZR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 

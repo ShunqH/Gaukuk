@@ -38,11 +38,15 @@ CXXFLAGS = -O3 -march=native -ffast-math -funroll-loops -std=c++14 -Wall
 # CXXFLAGS += -Rpass=loop-vectorize
 # 		   -fopt-info-vec-optimized 
 # CXXFLAGS = -O0 -march=native -ffast-math -funroll-loops -std=c++14 -Wall 
+
+# debug use
+# CXXFLAGS = -O0 -g -fsanitize=address -fno-omit-frame-pointer -std=c++14 -Wall
+# LDFLAGS += -fsanitize=address
+
 CXXFLAGS += $(PRECISION_FLAG)
 CXXFLAGS += -DGAUKUK_DENSITY_FLOOR=$(GAUKUK_DENSITY_FLOOR) \
             -DGAUKUK_PRESSURE_FLOOR=$(GAUKUK_PRESSURE_FLOOR)
 INCLUDES = -Isrc
-LDFLAGS =
 
 # if USE_OPENMP=1，add -fopenmp
 ifeq ($(USE_OPENMP),1)
@@ -71,6 +75,8 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/boundary/periodic.cpp \
 	   $(MAIN_DIR)/boundary/reflective.cpp \
 	   $(MAIN_DIR)/boundary/outflow.cpp \
+	   $(MAIN_DIR)/boundary/fixed.cpp \
+	   $(MAIN_DIR)/boundary/immersed.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_first_order.cpp \
 	   $(MAIN_DIR)/reconstruction/recon_piecewise_linear.cpp \
 	   $(MAIN_DIR)/setup/setup_$(SETUP).cpp \
@@ -78,7 +84,6 @@ SRCS = $(MAIN_DIR)/main.cpp \
 	   $(MAIN_DIR)/source_term/const_gravity.cpp \
 	   $(MAIN_DIR)/source_term/point_gravity.cpp \
 	   $(MAIN_DIR)/source_term/binary_gravity.cpp \
-	   $(MAIN_DIR)/source_term/inner_wave_killing.cpp \
 	   $(MAIN_DIR)/utils/write_sim.cpp \
 	   $(MAIN_DIR)/utils/read_config.cpp 
 

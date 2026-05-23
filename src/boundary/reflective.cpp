@@ -16,7 +16,7 @@ namespace Gaukuk
 //
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
@@ -53,7 +53,7 @@ void Boundary::ReflectiveXL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // X direction, right side 
-void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
@@ -91,7 +91,7 @@ void Boundary::ReflectiveXR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, left side 
-void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
@@ -129,7 +129,7 @@ void Boundary::ReflectiveYL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, right side 
-void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
@@ -167,7 +167,7 @@ void Boundary::ReflectiveYR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, left side 
-void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
@@ -205,7 +205,7 @@ void Boundary::ReflectiveZL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, right side 
-void Boundary::ReflectiveZR(TArray<Real>& cons, const Grid& grid){
+void Boundary::ReflectiveZR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 

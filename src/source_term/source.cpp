@@ -1,6 +1,6 @@
 // C++ headers
-#include <cmath>            // sqrt(), abs()
-#include <algorithm>        // max()  
+#include <cmath>            // std::sqrt(), std::abs()
+#include <algorithm>        // std::max()  
 #include <stdexcept>        // std::runtime_error()
 
 // Gaukuk dependence

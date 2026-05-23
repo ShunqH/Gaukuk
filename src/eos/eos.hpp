@@ -21,13 +21,13 @@ public:
     void PrimToCons(const TArray<Real>& prim, TArray<Real>& cons, 
                     const Grid& grid); 
     
-    const Real GetGamma(){ return gamma_; }
-    const Real GetGm1Rec(){ return gm1Rec_; }
+    Real GetGamma() const { return gamma_; }
+    Real GetGm1Rec() const { return gm1Rec_; }
 
-    inline Real SoundSpeed(const Real den, const Real pre){
+    inline Real SoundSpeed(const Real den, const Real pre) const {
         return std::sqrt(gamma_*pre/den); 
     }
-    inline Real EGas(const Real den, const Real pre){
+    inline Real EGas(const Real den, const Real pre) const {
         return pre * gm1Rec_; 
     }
     

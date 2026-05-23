@@ -17,7 +17,7 @@ namespace Gaukuk
 //
 //------------------------------------------------------------
 // X direction, left side 
-void Boundary::OutflowXL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowXL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
@@ -66,7 +66,7 @@ void Boundary::OutflowXL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // X direction, right side 
-void Boundary::OutflowXR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowXR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
@@ -115,7 +115,7 @@ void Boundary::OutflowXR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, left side 
-void Boundary::OutflowYL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowYL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
@@ -164,7 +164,7 @@ void Boundary::OutflowYL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Y direction, right side 
-void Boundary::OutflowYR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowYR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
@@ -213,7 +213,7 @@ void Boundary::OutflowYR(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, left side 
-void Boundary::OutflowZL(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowZL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
@@ -262,7 +262,7 @@ void Boundary::OutflowZL(TArray<Real>& cons, const Grid& grid){
 
 //------------------------------------------------------------
 // Z direction, right side 
-void Boundary::OutflowZR(TArray<Real>& cons, const Grid& grid){
+void Boundary::OutflowZR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 

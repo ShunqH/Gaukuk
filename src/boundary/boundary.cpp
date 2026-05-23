@@ -10,13 +10,15 @@
 namespace Gaukuk
 {
 
-Boundary::Boundary(){
+Boundary::Boundary() : isFixedBdEnrolled(false), isFixedInner(false), isImmersed(false), nShell(0) {
     int typeBDXL = static_cast<int>(Config::getInstance().get("xleft")); 
     int typeBDXR = static_cast<int>(Config::getInstance().get("xright")); 
     int typeBDYL = static_cast<int>(Config::getInstance().get("yleft")); 
     int typeBDYR = static_cast<int>(Config::getInstance().get("yright")); 
     int typeBDZL = static_cast<int>(Config::getInstance().get("zleft")); 
-    int typeBDZR = static_cast<int>(Config::getInstance().get("zright")); 
+    int typeBDZR = static_cast<int>(Config::getInstance().get("zright"));
+    int enableImmersed = static_cast<int>(Config::getInstance().get("enableImmersed", 0));
+
     // X left boundary registration
     if (typeBDXL == 0){
         Bdxl = &OutflowCopyXL;
@@ -26,6 +28,10 @@ Boundary::Boundary(){
         Bdxl = &ReflectiveXL;
     }else if (typeBDXL == 3){
         Bdxl = &OutflowXL;
+    }else if (typeBDXL == 4){
+        Bdxl = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDXL(cons, grid, eos);
+        };
     }else{
         Bdxl = &OutflowCopyXL;
     }
@@ -39,6 +45,10 @@ Boundary::Boundary(){
         Bdxr = &ReflectiveXR;
     }else if (typeBDXR == 3){
         Bdxr = &OutflowXR;
+    }else if (typeBDXR == 4){
+        Bdxr = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDXR(cons, grid, eos);
+        };
     }else{
         Bdxr = &OutflowCopyXR;
     }
@@ -52,6 +62,10 @@ Boundary::Boundary(){
         Bdyl = &ReflectiveYL;
     }else if (typeBDYL == 3){
         Bdyl = &OutflowYL;
+    }else if (typeBDYL == 4){
+        Bdyl = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDYL(cons, grid, eos);
+        };
     }else{
         Bdyl = &OutflowCopyYL;
     }
@@ -65,6 +79,10 @@ Boundary::Boundary(){
         Bdyr = &ReflectiveYR;
     }else if (typeBDYR == 3){
         Bdyr = &OutflowYR;
+    }else if (typeBDYR == 4){
+        Bdyr = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDYR(cons, grid, eos);
+        };
     }else{
         Bdyr = &OutflowCopyYR;
     }
@@ -78,6 +96,10 @@ Boundary::Boundary(){
         Bdzl = &ReflectiveZL;
     }else if (typeBDZL == 3){
         Bdzl = &OutflowZL;
+    }else if (typeBDZL == 4){
+        Bdzl = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDZL(cons, grid, eos);
+        };
     }else{
         Bdzl = &OutflowCopyYL;
     }
@@ -91,19 +113,31 @@ Boundary::Boundary(){
         Bdzr = &ReflectiveZR;
     }else if (typeBDZR == 3){
         Bdzr = &OutflowZR;
+    }else if (typeBDZR == 4){
+        Bdzr = [this](TArray<Real>& cons, const Grid& grid, const EquationOfState& eos) {
+            this->FixedBDZR(cons, grid, eos);
+        };
     }else{
         Bdzr = &OutflowCopyYR;
     }
+
+    if (enableImmersed != 0){ isImmersed = true; }
 }
 
-void Boundary::UpdateBD(TArray<Real>& cons, const Grid& grid){
-    Bdxl(cons, grid); 
-    Bdxr(cons, grid); 
-    Bdyl(cons, grid); 
-    Bdyr(cons, grid); 
+void Boundary::UpdateBD(TArray<Real>& cons, const Grid& grid, const Domain& domain, const EquationOfState& eos){
+    Bdxl(cons, grid, eos); 
+    Bdxr(cons, grid, eos); 
+    Bdyl(cons, grid, eos); 
+    Bdyr(cons, grid, eos); 
 if (grid.nz>1){
-    Bdzl(cons, grid); 
-    Bdzr(cons, grid); 
+    Bdzl(cons, grid, eos); 
+    Bdzr(cons, grid, eos); 
+}
+if (isImmersed){
+    ImmersedReflective(cons, eos); 
+}
+if (isFixedInner){
+    FixedBDInner(cons, grid, domain, eos); 
 }
 }
 

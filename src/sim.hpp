@@ -54,7 +54,7 @@ using VoidFunc = void (Sim::*)();
     void ForwardEuler_(); 
     void RK2_(); 
     void RK3_(); 
-    TArray<Real> consTemp, consTemp2; 
+    TArray<Real> consTemp; 
 }; 
 
 } // namespace Gaukuk

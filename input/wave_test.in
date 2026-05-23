@@ -13,8 +13,8 @@ dtoutput        = 0.01          # output every dtoutput
 dataType        = 0             # 0: output cons; 1: output prim
 
 # domain size 
-xmin            = -1.0
-xmax            =  1.0
+xmin            = -0.5
+xmax            =  0.5
 ymin            = -0.5
 ymax            =  0.5
 zmin            = -0.5
@@ -22,15 +22,15 @@ zmax            =  0.5
 
 # mesh 
 NX              = 256           # resolution on x   
-NY              = 128           # resolution on y 
+NY              = 256           # resolution on y 
 NZ              = 1             # resolution on z 
 
 NGhost          = 2             # number of ghost cell ( usually is 1 )
 
 # boundary 
 # 0: copy, 1: periodic, 2: reflective
-xleft           = 2             # 
-xright          = 2             # 
+xleft           = 1             # 
+xright          = 1             # 
 yleft           = 1             # 
 yright          = 1
 zleft           = 1

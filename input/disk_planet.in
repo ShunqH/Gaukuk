@@ -1,5 +1,5 @@
 # simulation 
-tmax            = 628.0046068758708  # total time 
+tmax            = 62.80046068758708  # total time 
 stepmax         = -1            # -1: unlimitted
 CFL             = 0.5           # CFL number ( CFL < 1 ), dt depends on CFL
 integrator      = 2             # 1 : forward euler; 2 : rk2; 3: rk3
@@ -12,7 +12,7 @@ dataType        = 0             # 0: output cons; 1: output prim
 # domain size 
 xmin            = -3.2 
 xmax            = 3.2 
-ymin            = -3.2
+ymin            = -3.2 
 ymax            = 3.2 
 zmin            = -0.5
 zmax            = 0.5 
@@ -24,11 +24,12 @@ NZ              = 1             # resolution on z
 NGhost          = 2             # number of ghost cell 
 
 # boundary 
-# 0 for copy, 1 for periodic, 2 for reflective, 3 for outflow
-xleft           = 3               
-xright          = 3              
-yleft           = 3              
-yright          = 3              
+# 0 for copy, 1 for periodic, 2 for reflective, 3 for outflow, 
+# 4 for fixed boundary (must enroll in setup)
+xleft           = 4               
+xright          = 4              
+yleft           = 4              
+yright          = 4              
 zleft           = 1              
 zright          = 1         
 
@@ -38,19 +39,21 @@ gamma           = 1.66666667    # for adiabatic eos
 # problem setup
 ## star 
 GM              = 1.0           # note that 2pi in code unit is one yr 
-rs0             = 0.05          # smoothing length 
+rs0             = 0.001         # smoothing length 
 
 ## planet 
-GMp             = 0.001           # note that 2pi in code unit is one yr 
+GMp             = 0.0       # note that 2pi in code unit is one yr 
 rp              = 1.0           # planet orbit radius     
-rs1             = 0.05          # smoothing length 
+rs1             = 0.001          # smoothing length 
 
 ## disk
 r0              = 1.0           
 rho0            = 1.0           # rho(r) = rho0 * (r/r0)^{-p}
 p               = 1.0  
 cs0             = 0.10          # cs(r) = cs0 * (r/r0)^{-q/2}
-q               = 1.0 
+q               = 1.0
+
+r_inner         = 0.3
          
 
 

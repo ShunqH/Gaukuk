@@ -125,7 +125,7 @@ void Sim::Setup(){
 // to all the ghost cell next to it
 //--------------------------------------------------------------------------
 // X direction, left side 
-void Boundary::SelfDefineBDXL(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDXL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.igb;                      // first ghost cell left side
     int ir = grid.ib;                       // first activated cell 
     int jl = grid.jb;                       // first activated cell 
@@ -162,7 +162,7 @@ void Boundary::SelfDefineBDXL(TArray<Real>& cons, const Grid& grid){
 
 //-------------------------------------------------------------------------
 // X direction, right side 
-void Boundary::SelfDefineBDXR(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDXR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ie;                       // first ghost cell right side
     int ir = grid.ige;                      // last ghost cell right side + 1
     int jl = grid.jb;                       // first activated cell 
@@ -200,7 +200,7 @@ void Boundary::SelfDefineBDXR(TArray<Real>& cons, const Grid& grid){
 
 //-------------------------------------------------------------------------
 // Y direction, left side 
-void Boundary::SelfDefineBDYL(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDYL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jgb;                      // first ghost cell left side 
@@ -238,7 +238,7 @@ void Boundary::SelfDefineBDYL(TArray<Real>& cons, const Grid& grid){
 
 //-------------------------------------------------------------------------
 // Y direction, right side 
-void Boundary::SelfDefineBDYR(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDYR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.je;                       // first ghost cell right side 
@@ -276,7 +276,7 @@ void Boundary::SelfDefineBDYR(TArray<Real>& cons, const Grid& grid){
 
 //-------------------------------------------------------------------------
 // Z direction, left side 
-void Boundary::SelfDefineBDZL(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDZL(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 
@@ -314,7 +314,7 @@ void Boundary::SelfDefineBDZL(TArray<Real>& cons, const Grid& grid){
 
 //-------------------------------------------------------------------------
 // Z direction, right side 
-void Boundary::SelfDefineBDZR(TArray<Real>& cons, const Grid& grid){
+void Boundary::SelfDefineBDZR(TArray<Real>& cons, const Grid& grid, const EquationOfState& eos){
     int il = grid.ib;                       // first activated cell 
     int ir = grid.ie;                       // first ghost cell right side
     int jl = grid.jb;                       // first activated cell 

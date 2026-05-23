@@ -32,6 +32,16 @@ void Sim::Setup()
     Real zmin = domain.zmin;
     Real zmax = domain.zmax;
 
+    // period lengths
+    Real Lx = xmax - xmin;
+    Real Ly = ymax - ymin;
+
+    // center in y (domain mid-point, can be changed)
+    Real y0 = 0.5 * (ymin + ymax);
+
+    // direction cosines for 45° upper-right (1,1,0)
+    const Real inv_sqrt2 = 1.0 / std::sqrt(2.0);
+
     int il = grid.ib;
     int ir = grid.ie;
     int jl = grid.jb;
@@ -48,23 +58,37 @@ void Sim::Setup()
                 Real y = domain.yc(j);
                 Real z = domain.zc(k);
 
-                // gaussian perturbation
-                Real dx = x - x0;
-                Real perturbation = amp * p0 * std::exp(-dx*dx / (2.0*sigma*sigma));
-
-                // (rho/rho0) = (p/p0)^{1/gamma}
-                // rho = rho0 * (1 + perturbation/(gamma*p0))
-                Real p = p0 + perturbation;
-                Real rho = rho0 * std::pow(p / p0, 1.0/gamma);
-
-                // velocity field, if addVel is on 
-                // u = p' / (rho0 * c0)
+                // accumulate contributions from periodic mirror images
+                // (here we assume sigma is small enough that i,j in {-1,0,1} is sufficient;
+                //  increase the range if sigma is comparable to Lx or Ly)
+                Real perturbation = 0.0;
                 Real vx = 0.0;
-                if (addVel == 1) {
-                    vx = perturbation / (rho0 * c0); 
-                }
                 Real vy = 0.0;
                 Real vz = 0.0;
+
+                for (int iper = -1; iper <= 1; ++iper) {
+                    for (int jper = -1; jper <= 1; ++jper) {
+                        Real xc = x0 + iper * Lx;
+                        Real yc = y0 + jper * Ly;
+
+                        // distance along the 45° direction
+                        Real dr = (x - xc) * inv_sqrt2 + (y - yc) * inv_sqrt2;
+
+                        // gaussian perturbation
+                        Real pert_ij = amp * p0 * std::exp(-dr*dr / (2.0*sigma*sigma));
+                        perturbation += pert_ij;
+
+                        if (addVel == 1) {
+                            Real v_amp = pert_ij / (rho0 * c0);
+                            vx += v_amp * inv_sqrt2;
+                            vy += v_amp * inv_sqrt2;
+                        }
+                    }
+                }
+
+                // pressure and density (isentropic relation)
+                Real p = p0 + perturbation;
+                Real rho = rho0 * std::pow(p / p0, 1.0/gamma);
 
                 prim(DEN, k, j, i) = rho;
                 prim(VLX, k, j, i) = vx;

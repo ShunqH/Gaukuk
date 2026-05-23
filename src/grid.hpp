@@ -45,6 +45,7 @@ class Domain{
 public:
 friend class Sim; 
 friend class SourceTerm; 
+friend class Boundary; 
     Domain(const Grid& grid); 
 
 private:

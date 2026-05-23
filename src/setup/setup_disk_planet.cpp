@@ -22,15 +22,27 @@ void Sim::Setup() {
     Real cs0 = Config::getInstance().get("cs0", 0.1); 
     Real q = Config::getInstance().get("q", 1.0); 
 
+    Real xShell = Config::getInstance().get("x0", 0.0);  
+    Real yShell = Config::getInstance().get("y0", 0.0);  
+    Real zShell = Config::getInstance().get("z0", 0.0);  
+    Real rShell = Config::getInstance().get("r_inner"); 
+
     Real r0Inv = 1.0/r0; 
     Real gammaInv = 1.0/gamma; 
 
-    int il = grid.ib;
-    int ir = grid.ie;
-    int jl = grid.jb;
-    int jr = grid.je;
-    int kl = grid.kb;
-    int kr = grid.ke;
+    // int il = grid.ib;
+    // int ir = grid.ie;
+    // int jl = grid.jb;
+    // int jr = grid.je;
+    // int kl = grid.kb;
+    // int kr = grid.ke;
+
+    int il = grid.igb;
+    int ir = grid.ige;
+    int jl = grid.jgb;
+    int jr = grid.jge;
+    int kl = grid.kgb;
+    int kr = grid.kge;
 
     // enroll the central point source 
     srcTerm.EnrollPointGravity(GM, 0, 0, 0, 0, 0, 0, rs0); 
@@ -48,16 +60,21 @@ void Sim::Setup() {
                 Real r = std::sqrt(r2); 
                 Real rInv = 1.0/(r + 1e-12); 
 
-                Real rhoNow = (r<5*rs0) ? 1e-6 : rho0 * std::pow(r*r0Inv, -p);
+                // Real rhoNow = (r<0.4) ? 1e-6 : rho0 * std::pow(r*r0Inv, -p);
+                Real rhoNow = rho0 * std::pow(r*r0Inv, -p);
 
                 Real cs = cs0 * std::pow(r*r0Inv, -0.5*q); 
                 Real pressure = gammaInv*cs*cs*rhoNow; 
 
                 Real r2s = r2 + rs0*rs0;
-                Real v_phi = std::sqrt( GM * r2 / (r2s * std::sqrt(r2s))  
-                                        + (p + q) * cs * cs );
+                Real v_phi2 = GM * r2 / (r2s * std::sqrt(r2s))  
+                              - gammaInv * (p + q) * cs * cs ;
+                if (v_phi2 < 0) { v_phi2 = 0; }
+                Real v_phi = std::sqrt( v_phi2 ); 
+                // Real v_phi = std::sqrt( GM * r2 / (r2s * std::sqrt(r2s)) 
+                                        // - (p + q) * cs * cs * gammaInv );
                 // Real v_phi = std::sqrt( GM  / std::sqrt(r2s) 
-                //                         - (p + q) * cs * cs ) ;
+                //                         - gammaInv * (p + q) * cs * cs ;
                 // vx = -v_phi * sinθ = -v_phi * (y/r)
                 // vy =  v_phi * cosθ =  v_phi * (x/r)
                 Real vx = -v_phi * (yNow * rInv);
@@ -82,6 +99,8 @@ void Sim::Setup() {
 
     // if primitive quantivities is set, make sure you call eos.PrimToCons 
     eos.PrimToCons(prim, cons, grid);
+    boundary.EnrollFixedBoundaryData(cons, grid, true); 
+    // boundary.SetupImmersedShell(grid, domain, xShell, yShell, zShell, rShell); 
 }
 
 } // namespace Gaukuk

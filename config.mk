@@ -1,5 +1,5 @@
 # configurable options
-SETUP = disk_planet
+SETUP = disk
 EOS = adiabatic
 FLUX = hllc
 USE_OPENMP = 1

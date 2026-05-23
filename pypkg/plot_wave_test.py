@@ -14,7 +14,7 @@ totalFrames = 1001
 
 tlist = np.zeros(totalFrames) 
 englist = np.zeros(totalFrames)
-sPath = "./wave_test_256_128_2order/"
+sPath = "/Users/shunq/Documents/CPP/cal_gaukuk/wave/diagonal_wave/"
 tag = "wave"
 
 for frameID in range(0, totalFrames):
@@ -41,12 +41,12 @@ for frameID in range(0, totalFrames):
     x = frame.xc
     y = frame.yc
     rhoMin = 1
-    rhoMax = 1.1
+    rhoMax = 1.2
 
     # print(il,ir,jl,jr)
     X, Y = np.meshgrid(x, y)
 
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(8, 6))
     plt.pcolormesh(X, Y, rho, cmap='viridis', shading='gouraud',
                    vmin=rhoMin, vmax=rhoMax)
     plt.colorbar(label='Density')
@@ -54,7 +54,7 @@ for frameID in range(0, totalFrames):
     plt.ylabel('y')
     plt.title('Density')
     plt.axis('equal')   
-    plt.savefig(savename, bbox_inches='tight', dpi=300)
+    plt.savefig(savename, bbox_inches='tight', dpi=150)
     # plt.show()
     plt.close()
     print("frame = ", frameID, end="\r")
@@ -63,19 +63,19 @@ np.save(sPath + "t_" + tag + ".npy", tlist)
 np.save(sPath + "eng_" + tag + ".npy", englist)
 
 plt.figure(figsize=(8, 6))
-plt.plot(tlist, englist/englist[0])
+plt.plot(tlist, englist/englist[0] - 1)
 
 emin = np.min(englist) / englist[0]
 emax = np.max(englist) / englist[0]
-plt.ylim(emin - 1e-6, emax + 1e-6)
+plt.ylim( - 1e-15, + 1e-15)
 
 plt.xlim(tlist[0], tlist[-1])
 plt.xlabel('t', fontsize = 15)
-plt.ylabel(r'$E/E0$', fontsize = 15)
+plt.ylabel(r'$E/E0-1$', fontsize = 15)
 plt.grid()
 plt.title('Energy Conservation', fontsize = 15) 
 plt.savefig(sPath + tag + "_energy_conservation.png", bbox_inches='tight', dpi=600)
-# plt.show()
+plt.show()
 plt.close()
 
 os.system("ffmpeg -y -framerate 60 -i " + sPath + tag + "_%05d.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 " + sPath + tag + ".mp4")

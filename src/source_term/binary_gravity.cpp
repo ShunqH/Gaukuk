@@ -40,7 +40,8 @@ void SourceTerm::BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, 
     Real r1Prim = std::sqrt(x1*x1 + y1*y1 + z1*z1); 
     Real r1pInv = 1.0/r1Prim; 
     Real gIndirdtdr1 = - gm1dt * r1pInv * r1pInv * r1pInv; 
-
+    // debug, indirect is set to 0 
+    gIndirdtdr1 = 0; 
     #pragma omp parallel for collapse(2) schedule(static)
     for (int k=kl; k<kr; k++){
         for (int j=jl; j<jr; j++){
@@ -76,17 +77,18 @@ void SourceTerm::BinaryGravity(TArray<Real>& cons, const Real t, const Real dt, 
                 Real& consEng = cons(ENG, k, j, i); 
 
                 // Real mask =  (r0Sqr < 5*5 * rs0*rs0) ? DENSITY_FLOOR : 1; 
+                // Real mask =  (r0Sqr < 0.5) ? 0 : 1; 
                 // Real newDen = mask * consDen ; 
                 // Real newMtx = mask * (consMtx + consDen*gxdt); 
                 // Real newMty = mask * (consMty + consDen*gydt); 
                 // Real newMtz = mask * (consMtz + consDen*gzdt); 
                 // Real newEng = mask * (consEng + consMtx*gxdt + consMty*gydt + consMtz*gzdt);
 
-                // consDen = newDen; 
-                // consMtx = newMtx; 
-                // consMty = newMty; 
-                // consMtz = newMtz; 
-                // consEng = newEng; 
+                // consDen = newDen + (1-mask)*fixInner(DEN, k, j, i); 
+                // consMtx = newMtx + (1-mask)*fixInner(MTX, k, j, i); 
+                // consMty = newMty + (1-mask)*fixInner(MTY, k, j, i); 
+                // consMtz = newMtz + (1-mask)*fixInner(MTZ, k, j, i); 
+                // consEng = newEng + (1-mask)*fixInner(ENG, k, j, i); 
                 
                 consEng += consMtx*gxdt + consMty*gydt + consMtz*gzdt;
                 consMtx += consDen*gxdt;

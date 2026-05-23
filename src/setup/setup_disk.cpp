@@ -28,12 +28,12 @@ void Sim::Setup() {
     Real deltaInv = 1.0/gapWidth; 
     Real gammaInv = 1.0/gamma; 
 
-    int il = grid.ib;
-    int ir = grid.ie;
-    int jl = grid.jb;
-    int jr = grid.je;
-    int kl = grid.kb;
-    int kr = grid.ke;
+    int il = grid.igb;
+    int ir = grid.ige;
+    int jl = grid.jgb;
+    int jr = grid.jge;
+    int kl = grid.kgb;
+    int kr = grid.kge;
 
     // enroll the central point source 
     srcTerm.EnrollPointGravity(GM, 0, 0, 0, 0, 0, 0, rs); 
@@ -52,8 +52,8 @@ void Sim::Setup() {
 
                 Real rhob = rho0 * std::pow(r*r0Inv, -p);
                 Real gaussian = 1 - gapDepth * std::exp(-0.5*(r-r0)*(r-r0)*deltaInv*deltaInv); 
-                Real rhoNow = (r<rs) ? 1e-6 : rhob * gaussian; 
-                // Real rhoNow = rhob * gaussian;
+                // Real rhoNow = (r<rs) ? 1e-6 : rhob * gaussian; 
+                Real rhoNow = rhob * gaussian;
 
                 Real cs = cs0 * std::pow(r*r0Inv, -0.5*q); 
                 Real pressure = gammaInv*cs*cs*rhoNow; 
@@ -91,6 +91,8 @@ void Sim::Setup() {
 
     // if primitive quantivities is set, make sure you call eos.PrimToCons 
     eos.PrimToCons(prim, cons, grid);
+    boundary.EnrollFixedBoundaryData(cons, grid); 
+    // boundary.SetupImmersedShell(grid, domain, 0, 0, 0, 0.4); 
 }
 
 } // namespace Gaukuk
