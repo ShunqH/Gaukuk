@@ -276,8 +276,8 @@ void Boundary::ImmersedReflective(TArray<Real>& cons, const EquationOfState& eos
 
             CarToLocal(vx, vy, vz, cosp, sinp, cost, sint, vrloc, vploc, vtloc);
 
-            // vr += 1./(-1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vrloc;
-            vr += 1./(1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vrloc;
+            vr += 1./(-1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vrloc;
+            // vr += 1./(1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vrloc;
             vp += 1./(1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vploc;
             vt += 1./(1.-disGamma(iShell, 0)) * disGamma(iShell, n)*vtloc;
 
@@ -288,7 +288,7 @@ void Boundary::ImmersedReflective(TArray<Real>& cons, const EquationOfState& eos
             pres += 1./(1.-disGamma(iShell, 0)) * disGamma(iShell, n)*preTar; 
         }
 
-        vr = std::min(0.0, vr); 
+        // vr = std::min(0.0, vr); 
 
         Real vx, vy, vz; 
         LocalToCar(vx, vy, vz, cosp, sinp, cost, sint, vr, vp, vt); 

@@ -1,5 +1,5 @@
 # configurable options
-SETUP = disk
+SETUP = solid_body
 EOS = adiabatic
 FLUX = hllc
 USE_OPENMP = 1
